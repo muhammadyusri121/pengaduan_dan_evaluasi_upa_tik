@@ -35,3 +35,4 @@ pengaduan_dan_evaluasi_upa_tik-*.tar
 npm-debug.log
 /assets/node_modules/
 
+.env

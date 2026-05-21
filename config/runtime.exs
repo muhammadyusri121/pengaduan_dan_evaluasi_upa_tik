@@ -7,21 +7,47 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
+if config_env() in [:dev, :test] do
+  env_path = Path.expand(".env", __DIR__ |> Path.join(".."))
+  if File.exists?(env_path) do
+    env_path
+    |> File.stream!()
+    |> Enum.each(fn line ->
+      # Support simple KEY=value parsing
+      case Regex.run(~r/^\s*([A-Za-z0-9_]+)\s*=\s*"?([^"\n]*)"?\s*$/, line) do
+        [_, key, value] -> System.put_env(key, String.trim(value))
+        _ -> :ok
+      end
+    end)
+  end
+end
+
+
 # ## Using releases
 #
 # If you use `mix release`, you need to explicitly enable the server
 # by passing the PHX_SERVER=true when you start it:
 #
-#     PHX_SERVER=true bin/pengaduan_dan_evaluasi_upa_tik start
+#     PHX_SERVER=true bin/sipadu start
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
 if System.get_env("PHX_SERVER") do
-  config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint, server: true
+  config :sipadu, SipaduWeb.Endpoint, server: true
 end
 
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+config :sipadu, SipaduWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+
+# Configure Ueberauth for Google OAuth
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
 if config_env() == :prod do
   database_url =
@@ -33,7 +59,7 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-  config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTik.Repo,
+  config :sipadu, Sipadu.Repo,
     # ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
@@ -55,9 +81,9 @@ if config_env() == :prod do
 
   host = System.get_env("PHX_HOST") || "example.com"
 
-  config :pengaduan_dan_evaluasi_upa_tik, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+  config :sipadu, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
-  config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+  config :sipadu, SipaduWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.
@@ -73,7 +99,7 @@ if config_env() == :prod do
   # To get SSL working, you will need to add the `https` key
   # to your endpoint configuration:
   #
-  #     config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+  #     config :sipadu, SipaduWeb.Endpoint,
   #       https: [
   #         ...,
   #         port: 443,
@@ -95,7 +121,7 @@ if config_env() == :prod do
   # We also recommend setting `force_ssl` in your config/prod.exs,
   # ensuring no data is ever sent via http, always redirecting to https:
   #
-  #     config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+  #     config :sipadu, SipaduWeb.Endpoint,
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
@@ -105,7 +131,7 @@ if config_env() == :prod do
   # In production you need to configure the mailer to use a different adapter.
   # Here is an example configuration for Mailgun:
   #
-  #     config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTik.Mailer,
+  #     config :sipadu, Sipadu.Mailer,
   #       adapter: Swoosh.Adapters.Mailgun,
   #       api_key: System.get_env("MAILGUN_API_KEY"),
   #       domain: System.get_env("MAILGUN_DOMAIN")

@@ -1,18 +1,35 @@
-# PengaduanDanEvaluasiUpaTik
+# Sipadu (Sistem Pengaduan Terpadu UPA TIK)
 
-To start your Phoenix server:
+Sipadu adalah aplikasi sistem pengaduan dan evaluasi terpadu untuk UPA TIK. Aplikasi ini memungkinkan pengguna (mahasiswa maupun civitas akademika) untuk masuk menggunakan akun Google Workspace (akun kampus) guna mengajukan pengaduan secara terintegrasi.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Persiapan & Menjalankan Aplikasi Lokal
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+1. Salin file `.env.example` menjadi `.env` dan masukkan konfigurasi Google Client ID & Secret Anda:
+   ```bash
+   cp .env.example .env
+   ```
+2. Instal *dependencies* Elixir & Node.js, serta siapkan database:
+   ```bash
+   mix setup
+   ```
+3. Jalankan server Phoenix:
+   ```bash
+   mix phx.server
+   ```
+   *(Atau jalankan melalui IEx dengan `iex -S mix phx.server`)*
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Sekarang Anda bisa mengakses aplikasi melalui browser di [`localhost:4000`](http://localhost:4000).
 
-## Learn more
+## Informasi Lingkungan (Environment)
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+- **Elixir / Phoenix**: Aplikasi dibangun menggunakan Phoenix v1.8+
+- **Autentikasi**: Ueberauth Google OAuth
+- **Database**: PostgreSQL (dikelola melalui Ecto)
+
+---
+*Dokumentasi bawaan Phoenix Framework:*
+* [Official website](https://www.phoenixframework.org/)
+* [Guides](https://hexdocs.pm/phoenix/overview.html)
+* [Docs](https://hexdocs.pm/phoenix)
+* [Forum](https://elixirforum.com/c/phoenix-forum)
+* [Source](https://github.com/phoenixframework/phoenix)

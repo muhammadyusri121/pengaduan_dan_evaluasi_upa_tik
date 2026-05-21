@@ -7,22 +7,22 @@
 # General application configuration
 import Config
 
-config :pengaduan_dan_evaluasi_upa_tik,
-  ecto_repos: [PengaduanDanEvaluasiUpaTik.Repo],
+config :sipadu,
+  ecto_repos: [Sipadu.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configure the endpoint
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+config :sipadu, SipaduWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [
-      html: PengaduanDanEvaluasiUpaTikWeb.ErrorHTML,
-      json: PengaduanDanEvaluasiUpaTikWeb.ErrorJSON
+      html: SipaduWeb.ErrorHTML,
+      json: SipaduWeb.ErrorJSON
     ],
     layout: false
   ],
-  pubsub_server: PengaduanDanEvaluasiUpaTik.PubSub,
+  pubsub_server: Sipadu.PubSub,
   live_view: [signing_salt: "MUsXwiUF"]
 
 # Configure the mailer
@@ -32,13 +32,13 @@ config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTik.Mailer,
+config :sipadu, Sipadu.Mailer,
   adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.4",
-  pengaduan_dan_evaluasi_upa_tik: [
+  sipadu: [
     args:
       ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/* --alias:@=.),
     cd: Path.expand("../assets", __DIR__),
@@ -48,7 +48,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "4.1.12",
-  pengaduan_dan_evaluasi_upa_tik: [
+  sipadu: [
     args: ~w(
       --input=assets/css/app.css
       --output=priv/static/assets/css/app.css

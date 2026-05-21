@@ -1,9 +1,9 @@
-defmodule PengaduanDanEvaluasiUpaTik.MixProject do
+defmodule Sipadu.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :pengaduan_dan_evaluasi_upa_tik,
+      app: :sipadu,
       version: "0.1.0",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -20,7 +20,7 @@ defmodule PengaduanDanEvaluasiUpaTik.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {PengaduanDanEvaluasiUpaTik.Application, []},
+      mod: {Sipadu.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -65,7 +65,9 @@ defmodule PengaduanDanEvaluasiUpaTik.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:ueberauth, "~> 0.10"},
+      {:ueberauth_google, "~> 0.10"}
     ]
   end
 
@@ -82,10 +84,10 @@ defmodule PengaduanDanEvaluasiUpaTik.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind pengaduan_dan_evaluasi_upa_tik", "esbuild pengaduan_dan_evaluasi_upa_tik"],
+      "assets.build": ["compile", "tailwind sipadu", "esbuild sipadu"],
       "assets.deploy": [
-        "tailwind pengaduan_dan_evaluasi_upa_tik --minify",
-        "esbuild pengaduan_dan_evaluasi_upa_tik --minify",
+        "tailwind sipadu --minify",
+        "esbuild sipadu --minify",
         "phx.digest"
       ],
       precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]

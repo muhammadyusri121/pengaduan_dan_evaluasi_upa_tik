@@ -1,4 +1,4 @@
-defmodule PengaduanDanEvaluasiUpaTikWeb.Telemetry do
+defmodule SipaduWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -53,23 +53,23 @@ defmodule PengaduanDanEvaluasiUpaTikWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("pengaduan_dan_evaluasi_upa_tik.repo.query.total_time",
+      summary("sipadu.repo.query.total_time",
         unit: {:native, :millisecond},
         description: "The sum of the other measurements"
       ),
-      summary("pengaduan_dan_evaluasi_upa_tik.repo.query.decode_time",
+      summary("sipadu.repo.query.decode_time",
         unit: {:native, :millisecond},
         description: "The time spent decoding the data received from the database"
       ),
-      summary("pengaduan_dan_evaluasi_upa_tik.repo.query.query_time",
+      summary("sipadu.repo.query.query_time",
         unit: {:native, :millisecond},
         description: "The time spent executing the query"
       ),
-      summary("pengaduan_dan_evaluasi_upa_tik.repo.query.queue_time",
+      summary("sipadu.repo.query.queue_time",
         unit: {:native, :millisecond},
         description: "The time spent waiting for a database connection"
       ),
-      summary("pengaduan_dan_evaluasi_upa_tik.repo.query.idle_time",
+      summary("sipadu.repo.query.idle_time",
         unit: {:native, :millisecond},
         description:
           "The time the connection spent waiting before being checked out for the query"
@@ -87,7 +87,7 @@ defmodule PengaduanDanEvaluasiUpaTikWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {PengaduanDanEvaluasiUpaTikWeb, :count_users, []}
+      # {SipaduWeb, :count_users, []}
     ]
   end
 end

@@ -1,4 +1,4 @@
-defmodule PengaduanDanEvaluasiUpaTikWeb.CoreComponents do
+defmodule SipaduWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -27,7 +27,7 @@ defmodule PengaduanDanEvaluasiUpaTikWeb.CoreComponents do
 
   """
   use Phoenix.Component
-  use Gettext, backend: PengaduanDanEvaluasiUpaTikWeb.Gettext
+  use Gettext, backend: SipaduWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
@@ -483,9 +483,9 @@ defmodule PengaduanDanEvaluasiUpaTikWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(PengaduanDanEvaluasiUpaTikWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(SipaduWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(PengaduanDanEvaluasiUpaTikWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(SipaduWeb.Gettext, "errors", msg, opts)
     end
   end
 

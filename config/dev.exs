@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTik.Repo,
+config :sipadu, Sipadu.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "passwd2972",
   hostname: "localhost",
-  database: "pengaduan_dan_evaluasi_upa_tik_dev",
+  database: "pengaduan_upa_tik_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -16,7 +16,7 @@ config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTik.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+config :sipadu, SipaduWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}],
@@ -27,8 +27,8 @@ config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
   watchers: [
     esbuild:
       {Esbuild, :install_and_run,
-       [:pengaduan_dan_evaluasi_upa_tik, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:pengaduan_dan_evaluasi_upa_tik, ~w(--watch)]}
+       [:sipadu, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:sipadu, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -55,7 +55,7 @@ config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
 # different ports.
 
 # Reload browser tabs when matching files change.
-config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
+config :sipadu, SipaduWeb.Endpoint,
   live_reload: [
     web_console_logger: true,
     patterns: [
@@ -64,13 +64,13 @@ config :pengaduan_dan_evaluasi_upa_tik, PengaduanDanEvaluasiUpaTikWeb.Endpoint,
       # Gettext translations
       ~r"priv/gettext/.*\.po$",
       # Router, Controllers, LiveViews and LiveComponents
-      ~r"lib/pengaduan_dan_evaluasi_upa_tik_web/router\.ex$",
-      ~r"lib/pengaduan_dan_evaluasi_upa_tik_web/(controllers|live|components)/.*\.(ex|heex)$"
+      ~r"lib/sipadu_web/router\.ex$",
+      ~r"lib/sipadu_web/(controllers|live|components)/.*\.(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :pengaduan_dan_evaluasi_upa_tik, dev_routes: true
+config :sipadu, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"

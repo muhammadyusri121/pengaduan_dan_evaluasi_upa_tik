@@ -1,6 +1,6 @@
-defmodule PengaduanDanEvaluasiUpaTik do
+defmodule Sipadu do
   @moduledoc """
-  PengaduanDanEvaluasiUpaTik keeps the contexts that define your domain
+  Sipadu keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

@@ -1,32 +1,53 @@
-defmodule PengaduanDanEvaluasiUpaTikWeb.Router do
-  use PengaduanDanEvaluasiUpaTikWeb, :router
+defmodule SipaduWeb.Router do
+  use SipaduWeb, :router
+  import SipaduWeb.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {PengaduanDanEvaluasiUpaTikWeb.Layouts, :root}
+    plug :put_root_layout, html: {SipaduWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
+  end
+
+  pipeline :require_auth do
+    plug :require_authenticated_user
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", PengaduanDanEvaluasiUpaTikWeb do
+  scope "/", SipaduWeb do
     pipe_through :browser
+
+    get "/login", AuthController, :login
+  end
+
+  scope "/", SipaduWeb do
+    pipe_through [:browser, :require_auth]
 
     get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PengaduanDanEvaluasiUpaTikWeb do
+  # scope "/api", SipaduWeb do
   #   pipe_through :api
   # end
 
+  scope "/auth", SipaduWeb do
+    pipe_through :browser
+
+    get "/signout", AuthController, :signout
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
+  end
+
   # Enable LiveDashboard and Swoosh mailbox preview in development
-  if Application.compile_env(:pengaduan_dan_evaluasi_upa_tik, :dev_routes) do
+  if Application.compile_env(:sipadu, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
     # it behind authentication and allow only admins to access it.
     # If your application does not have an admins-only section yet,
@@ -37,7 +58,7 @@ defmodule PengaduanDanEvaluasiUpaTikWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: PengaduanDanEvaluasiUpaTikWeb.Telemetry
+      live_dashboard "/dashboard", metrics: SipaduWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end

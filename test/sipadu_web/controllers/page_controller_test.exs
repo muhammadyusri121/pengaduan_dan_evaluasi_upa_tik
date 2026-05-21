@@ -1,5 +1,5 @@
-defmodule PengaduanDanEvaluasiUpaTikWeb.PageControllerTest do
-  use PengaduanDanEvaluasiUpaTikWeb.ConnCase
+defmodule SipaduWeb.PageControllerTest do
+  use SipaduWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
