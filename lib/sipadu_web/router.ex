@@ -23,13 +23,15 @@ defmodule SipaduWeb.Router do
   scope "/", SipaduWeb do
     pipe_through :browser
 
+    get "/", PageController, :home
     get "/login", AuthController, :login
   end
 
   scope "/", SipaduWeb do
     pipe_through [:browser, :require_auth]
 
-    get "/", PageController, :home
+    get "/survei", SurveiController, :index
+    post "/survei", SurveiController, :create
   end
 
   # Other scopes may use custom stacks.

@@ -1,0 +1,41 @@
+<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <div class="card bg-base-100 shadow-xl shadow-base-200/50 border border-base-200">
+    <div class="card-body">
+      <.header class="text-center mb-6">
+        <h2 class="text-3xl font-bold text-primary">Survei Evaluasi Layanan</h2>
+        <:subtitle>Berikan masukan Anda untuk peningkatan kualitas layanan kami</:subtitle>
+      </.header>
+
+      <.form for={@form} action={~p"/survei"} method="post" class="space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <.input field={@form[:nama]} type="text" label="Nama Lengkap" placeholder="Masukkan nama Anda" required />
+          <.input field={@form[:jabatan]} type="select" label="Jabatan" options={[{"Mahasiswa", "mahasiswa"}, {"Dosen", "dosen"}, {"Tendik", "tendik"}]} prompt="Pilih Jabatan" required />
+          <.input field={@form[:nim_nip]} type="text" label="NIM / NIP" placeholder="Masukkan NIM atau NIP Anda" required />
+          <.input field={@form[:no_hp]} type="text" label="No. HP / WhatsApp" placeholder="Masukkan nomor HP Anda" />
+          <.input field={@form[:fakultas_unit_kerja]} type="text" label="Fakultas / Unit Kerja" placeholder="Contoh: Fakultas Teknik" required />
+          <.input field={@form[:layanan_yang_diminta]} type="text" label="Layanan yang Diminta" placeholder="Contoh: Jaringan Internet" required />
+        </div>
+
+        <div class="divider">Penilaian Layanan</div>
+
+        <div class="space-y-2">
+          <.input field={@form[:kemudahan_pengajuan]} type="rating" label="Kemudahan Pengajuan Layanan" />
+          <.input field={@form[:kecepatan_respon]} type="rating" label="Kecepatan Respon" />
+          <.input field={@form[:kecepatan_penanganan]} type="rating" label="Kecepatan Penanganan" />
+          <.input field={@form[:kualitas_layanan]} type="rating" label="Kualitas Layanan" />
+        </div>
+
+        <div class="divider">Masukan Tambahan</div>
+
+        <.input field={@form[:masukan]} type="textarea" label="Kritik & Saran" placeholder="Tuliskan kritik, saran, atau masukan Anda di sini..." rows="4" />
+
+        <div class="form-control mt-8">
+          <button type="submit" class="btn btn-primary w-full text-lg shadow-lg hover:shadow-primary/50 transition-all">
+            Kirim Evaluasi
+          </button>
+        </div>
+      </.form>
+    </div>
+  </div>
+</div>

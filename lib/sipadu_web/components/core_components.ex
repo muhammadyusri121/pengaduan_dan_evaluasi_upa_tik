@@ -164,7 +164,7 @@ defmodule SipaduWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               search select tel text textarea time url week hidden)
+               search select tel text textarea time url week hidden rating)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -273,6 +273,30 @@ defmodule SipaduWeb.CoreComponents do
   end
 
   # All other inputs text, datetime-local, url, password, etc. are handled here...
+  def input(%{type: "rating"} = assigns) do
+    ~H"""
+    <div class="form-control mb-4">
+      <label for={@id}>
+        <span :if={@label} class="label-text font-semibold text-base block">{@label}</span>
+      </label>
+      <div class="rating rating-lg gap-2 mt-2">
+        <%= for i <- 1..5 do %>
+          <input 
+            type="radio" 
+            id={"#{@id}_#{i}"}
+            name={@name} 
+            value={i} 
+            class="mask mask-star-2 bg-orange-400 hover:scale-110 transition-transform" 
+            checked={to_string(@value) == to_string(i) || (i == 5 && @value == nil)} 
+            {@rest}
+          />
+        <% end %>
+      </div>
+      <.error :for={msg <- @errors}>{msg}</.error>
+    </div>
+    """
+  end
+
   def input(assigns) do
     ~H"""
     <div class="fieldset mb-2">
@@ -296,7 +320,7 @@ defmodule SipaduWeb.CoreComponents do
   end
 
   # Helper used by inputs to generate form errors
-  defp error(assigns) do
+  def error(assigns) do
     ~H"""
     <p class="mt-1.5 flex gap-2 items-center text-sm text-error">
       <.icon name="hero-exclamation-circle" class="size-5" />
@@ -308,13 +332,14 @@ defmodule SipaduWeb.CoreComponents do
   @doc """
   Renders a header with title.
   """
+  attr :class, :any, default: nil
   slot :inner_block, required: true
   slot :subtitle
   slot :actions
 
   def header(assigns) do
     ~H"""
-    <header class={[@actions != [] && "flex items-center justify-between gap-6", "pb-4"]}>
+    <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <h1 class="text-lg font-semibold leading-8">
           {render_slot(@inner_block)}
