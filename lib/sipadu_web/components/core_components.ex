@@ -206,7 +206,7 @@ defmodule SipaduWeb.CoreComponents do
 
     ~H"""
     <div class="fieldset mb-2">
-      <label for={@id}>
+      <label class="text-white" for={@id}>
         <input
           type="hidden"
           name={@name}
@@ -214,7 +214,7 @@ defmodule SipaduWeb.CoreComponents do
           disabled={@rest[:disabled]}
           form={@rest[:form]}
         />
-        <span class="label">
+        <span class="">
           <input
             type="checkbox"
             id={@id}
@@ -233,9 +233,9 @@ defmodule SipaduWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div class="fieldset mb-2">
-      <label for={@id}>
-        <span :if={@label} class="label mb-1">{@label}</span>
+    <div class="fieldset mb-2 ">
+      <label class="text-white" for={@id}>
+        <span :if={@label} class="mb-1">{@label}</span>
         <select
           id={@id}
           name={@name}
@@ -255,8 +255,8 @@ defmodule SipaduWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div class="fieldset mb-2">
-      <label for={@id}>
-        <span :if={@label} class="label mb-1">{@label}</span>
+      <label class="text-white" for={@id}>
+        <span :if={@label} class="mb-1">{@label}</span>
         <textarea
           id={@id}
           name={@name}
@@ -276,18 +276,18 @@ defmodule SipaduWeb.CoreComponents do
   def input(%{type: "rating"} = assigns) do
     ~H"""
     <div class="form-control mb-4">
-      <label for={@id}>
-        <span :if={@label} class="label-text font-semibold text-base block">{@label}</span>
+      <label class="text-white" for={@id}>
+        <span :if={@label} class="font-semibold text-base block">{@label}</span>
       </label>
       <div class="rating rating-lg gap-2 mt-2">
         <%= for i <- 1..5 do %>
-          <input 
-            type="radio" 
+          <input
+            type="radio"
             id={"#{@id}_#{i}"}
-            name={@name} 
-            value={i} 
-            class="mask mask-star-2 bg-orange-400 hover:scale-110 transition-transform" 
-            checked={to_string(@value) == to_string(i) || (i == 5 && @value == nil)} 
+            name={@name}
+            value={i}
+            class="mask mask-star-2 bg-orange-400 hover:scale-110 transition-transform"
+            checked={to_string(@value) == to_string(i) || (i == 5 && @value == nil)}
             {@rest}
           />
         <% end %>
@@ -300,8 +300,8 @@ defmodule SipaduWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div class="fieldset mb-2">
-      <label for={@id}>
-        <span :if={@label} class="label mb-1">{@label}</span>
+      <label class="text-white" for={@id}>
+        <span :if={@label} class="mb-1">{@label}</span>
         <input
           type={@type}
           name={@name}

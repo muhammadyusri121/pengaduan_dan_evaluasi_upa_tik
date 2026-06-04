@@ -1,0 +1,69 @@
+<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <.link navigate={~p"/laporan"} class="btn btn-ghost gap-2 pl-0 hover:bg-transparent hover:text-primary">
+      <.icon name="hero-arrow-left" class="w-4 h-4" />
+      Kembali ke Riwayat Pengaduan
+    </.link>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl border border-base-200">
+    <div class="card-body p-8">
+      <.header class="text-center mb-8">
+        <h2 class="text-3xl font-extrabold text-white">Form Laporan Pengaduan</h2>
+        <:subtitle>Laporkan kendala IT yang Anda hadapi untuk segera ditindaklanjuti</:subtitle>
+      </.header>
+
+      <.form for={@form} action={~p"/laporan"} method="post" multipart={true} class="space-y-6">
+        
+        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Data Diri Pelapor</div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <.input field={@form[:nama]} type="text" label="Nama Lengkap" placeholder="Nama Anda" required />
+          <.input field={@form[:nim_nip]} type="number" label="NIM / NIP" placeholder="Masukkan NIM atau NIP" required />
+          <.input field={@form[:no_hp]} type="text" label="No. HP / WhatsApp" placeholder="Contoh: 08123456789" />
+          <.input field={@form[:fakultas_unit_kerja]} type="text" label="Fakultas / Unit Kerja" placeholder="Contoh: Fakultas Teknik" required />
+        </div>
+
+        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Detail Kendala / Masalah</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <.input field={@form[:kategori]} type="select" label="Kategori Permasalahan" 
+            options={[
+              {"Jaringan / Internet (WiFi/LAN)", "Jaringan / Internet (WiFi/LAN)"},
+              {"Sistem Informasi / Web Kampus", "Sistem Informasi / Web Kampus"},
+              {"Perangkat Keras / Hardware", "Perangkat Keras / Hardware"},
+              {"Akun / Akses (SSO/Email)", "Akun / Akses (SSO/Email)"},
+              {"Lain-lain", "Lain-lain"}
+            ]} 
+            prompt="Pilih Kategori" required />
+            
+          <.input field={@form[:lokasi]} type="text" label="Lokasi Kejadian" placeholder="Contoh: Ruang 305 Gedung Bersama" required />
+        </div>
+
+        <.input field={@form[:judul_laporan]} type="text" label="Judul Pengaduan" placeholder="Contoh: Koneksi internet lambat di lab komputer" required />
+        
+        <.input field={@form[:deskripsi]} type="textarea" label="Deskripsi Detail Permasalahan" placeholder="Jelaskan detail masalah, kapan mulai terjadi, dan dampaknya..." rows="5" required />
+
+        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Bukti Lampiran</div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-semibold text-white">Upload Gambar / File Pendukung (Opsional)</span>
+            <span class="label-text-alt text-white">Maks 5MB</span>
+          </label>
+          <input type="file" name="laporan[lampiran_file]" id="lampiran_file" class="file-input file-input-bordered file-input-primary w-full text-white" accept="image/*,.pdf,.doc,.docx" />
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">Dapat berupa screenshot speedtest, bukti error, atau foto kerusakan fisik.</span>
+          </label>
+        </div>
+
+        <div class="form-control mt-8">
+          <button type="submit" class="btn btn-primary w-full text-lg shadow-lg hover:shadow-primary/50 transition-all gap-2">
+            <.icon name="hero-paper-airplane" class="w-5 h-5" />
+            Kirim Laporan Pengaduan
+          </button>
+        </div>
+      </.form>
+    </div>
+  </div>
+</div>

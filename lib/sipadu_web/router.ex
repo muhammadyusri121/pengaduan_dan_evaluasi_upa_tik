@@ -32,6 +32,12 @@ defmodule SipaduWeb.Router do
 
     get "/survei", SurveiController, :index
     post "/survei", SurveiController, :create
+
+    # Laporan / Pengaduan Routes
+    get "/laporan", LaporanController, :index
+    get "/laporan/baru", LaporanController, :new
+    post "/laporan", LaporanController, :create
+    get "/laporan/lampiran/:filename", LaporanController, :show_file
   end
 
   # Other scopes may use custom stacks.
