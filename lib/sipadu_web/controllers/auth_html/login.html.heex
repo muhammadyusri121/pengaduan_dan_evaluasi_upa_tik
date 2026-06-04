@@ -1,21 +1,110 @@
-<Layouts.app flash={@flash}>
-  <div class="flex items-center justify-center min-h-[80vh] px-4">
-    <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg border border-gray-100">
-      <div class="text-center">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-900">Selamat Datang</h2>
-        <p class="mt-2 text-sm text-gray-600">
-          Silakan masuk menggunakan akun kampus Anda.
-        </p>
-      </div>
-      
-      <div class="mt-8">
-        <.link href={~p"/auth/google"} class="flex items-center justify-center w-full px-4 py-3 text-sm font-semibold text-white transition-colors bg-blue-600 border border-transparent rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
-          </svg>
-          Login dengan Google Workspace
+<div class="absolute top-0 left-0 w-full min-h-screen z-50 flex flex-col bg-slate-50 font-sans overflow-hidden">
+  <div class="absolute top-24 right-4 sm:top-28 sm:right-6 z-[60] flex flex-col gap-3">
+    <.flash kind={:info} title="Informasi" flash={@flash} />
+    <.flash kind={:error} title="Gagal!" flash={@flash} />
+  </div>
+
+  <div class="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+    <div class="absolute top-[10%] right-[-5%] md:top-20 md:right-20 w-64 md:w-80 h-64 md:h-80 bg-blue-400/20 rounded-full blur-[80px]">
+    </div>
+    <div class="absolute bottom-[5%] left-[-5%] md:bottom-20 md:left-20 w-72 md:w-96 h-72 md:h-96 bg-indigo-400/20 rounded-full blur-[80px]">
+    </div>
+  </div>
+
+  <header class="relative z-50 bg-white/75 backdrop-blur-xl border-b border-slate-200/60 shadow-sm supports-[backdrop-filter]:bg-white/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+      <.link href={~p"/"} class="flex items-center gap-3 cursor-pointer group">
+        <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-1.5 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+          <.icon name="hero-question-mark-circle" class="w-6 h-6" />
+        </div>
+        <span class="font-extrabold text-xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 tracking-tight">
+          SIPADU
+        </span>
+      </.link>
+
+      <div class="flex items-center">
+        <.link
+          href={~p"/"}
+          class="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 text-sm font-semibold px-4 md:px-5 py-2 md:py-2.5 rounded-full hover:bg-slate-50 hover:text-blue-600 hover:border-blue-300 shadow-sm hover:shadow-md active:scale-95 transition-all duration-300"
+        >
+          <.icon name="hero-arrow-left" class="w-4 h-4 md:w-5 md:h-5" />
+          <span class="hidden sm:inline-block">Kembali ke Beranda</span>
+          <span class="inline-block sm:hidden">Kembali</span>
         </.link>
       </div>
     </div>
+  </header>
+
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 relative z-10 py-10 w-full">
+    <div class="w-full max-w-md bg-white/80 backdrop-blur-xl p-8 sm:p-10 rounded-[2rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-white">
+      <div class="flex flex-col items-center text-center mb-8">
+        <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-3.5 rounded-2xl shadow-lg shadow-blue-500/30 mb-5 transform transition-transform hover:rotate-3 duration-300">
+          <.icon name="hero-question-mark-circle" class="w-8 h-8" />
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
+          Masuk ke SIPADU
+        </h2>
+        <p class="text-sm text-slate-500 leading-relaxed px-2">
+          Sistem Pengaduan dan Evaluasi Terpadu UPA TIK.
+        </p>
+      </div>
+
+      <div class="mb-8 p-4 bg-blue-50/80 border border-blue-100 rounded-2xl flex items-start gap-3.5 shadow-sm">
+        <div class="bg-blue-100 text-blue-600 p-1.5 rounded-full shrink-0 mt-0.5">
+          <.icon name="hero-information-circle-solid" class="w-5 h-5" />
+        </div>
+        <div class="text-left">
+          <h3 class="text-sm font-bold text-blue-900">Akses Mahasiswa</h3>
+          <p class="text-xs sm:text-sm text-blue-700 mt-1.5 leading-relaxed">
+            Hanya menerima login menggunakan email aktif kampus berakhiran
+            <strong class="font-bold text-blue-900 bg-blue-200/50 px-1 py-0.5 rounded break-all">
+              @student.trunojoyo.ac.id
+            </strong>
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <.link
+          href={~p"/auth/google"}
+          class="group relative flex items-center justify-center w-full px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all duration-300 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-[0_4px_15px_rgb(66,133,244,0.15)] hover:border-blue-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 active:scale-[0.98]"
+        >
+          <svg
+            class="w-5 h-5 mr-3 shrink-0 transition-transform duration-300 group-hover:scale-110"
+            viewBox="0 0 48 48"
+          >
+            <path
+              fill="#EA4335"
+              d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+            />
+            <path
+              fill="#4285F4"
+              d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+            />
+            <path
+              fill="#34A853"
+              d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+            />
+          </svg>
+          Lanjutkan dengan Google
+        </.link>
+      </div>
+
+      <div class="mt-8 text-center relative z-10">
+        <p class="text-xs text-slate-400">
+          Mengalami kendala saat login? <br class="sm:hidden" />
+          <a
+            href="#"
+            class="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+          >
+            Hubungi Helpdesk TIK
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
-</Layouts.app>
+</div>

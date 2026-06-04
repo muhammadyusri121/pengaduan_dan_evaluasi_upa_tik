@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :sipadu, Sipadu.Repo,
   username: "postgres",
-  password: "passwd2972",
+  password: "Asuna123",
   hostname: "localhost",
   database: "pengaduan_upa_tik_dev",
   stacktrace: true,
@@ -25,9 +25,7 @@ config :sipadu, SipaduWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "9fsJhfE0sA6+WMosc1vGHn8HHLL8cPHO4NB3rm5357Tq65N9myJmn1Z/6BVce8i3",
   watchers: [
-    esbuild:
-      {Esbuild, :install_and_run,
-       [:sipadu, ~w(--sourcemap=inline --watch)]},
+    esbuild: {Esbuild, :install_and_run, [:sipadu, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:sipadu, ~w(--watch)]}
   ]
 
