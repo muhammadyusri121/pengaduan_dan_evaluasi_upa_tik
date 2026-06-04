@@ -30,7 +30,18 @@ defmodule Sipadu.Accounts do
     email = attrs[:email] || attrs["email"]
 
     case get_user_by_email(email) do
-      %User{} = user -> user
+      %User{} = user ->
+        # Update image and name to keep it synced with Google
+        update_attrs = %{
+          "name" => attrs[:name] || attrs["name"],
+          "image" => attrs[:image] || attrs["image"]
+        }
+        
+        # We only update if the fields are actually present to avoid nulling them out
+        update_attrs = Enum.reject(update_attrs, fn {_, v} -> is_nil(v) end) |> Enum.into(%{})
+        
+        {:ok, updated_user} = update_user(user, update_attrs)
+        updated_user
       nil ->
         %User{}
         |> User.changeset(attrs)

@@ -49,6 +49,13 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
+# Configure MinIO
+config :sipadu, Sipadu.Minio,
+  endpoint: System.get_env("MINIO_ENDPOINT", "http://localhost:9000"),
+  access_key: System.get_env("MINIO_ACCESS_KEY", "minioadmin"),
+  secret_key: System.get_env("MINIO_SECRET_KEY", "minioadmin"),
+  bucket: System.get_env("MINIO_BUCKET", "laporanupatik")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

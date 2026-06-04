@@ -1,0 +1,104 @@
+<div class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl !text-blue font-extrabold tracking-tight">Riwayat Pengaduan</h1>
+      <p class="text-base-content/70 mt-1">Pantau dan kelola laporan pengaduan layanan UPA TIK Anda di sini.</p>
+    </div>
+    <.link navigate={~p"/laporan/baru"} class="btn btn-primary shadow-lg hover:shadow-primary/40 transition-all gap-2">
+      <.icon name="hero-plus-circle" class="w-5 h-5" />
+      Buat Pengaduan Baru
+    </.link>
+  </div>
+
+  <%= if @laporan_list == [] do %>
+    <div class="card bg-base-100 shadow-xl border border-base-200 py-16 text-center">
+      <div class="card-body max-w-md mx-auto items-center">
+        <div class="p-4 bg-primary/10 rounded-full text-primary mb-4">
+          <.icon name="hero-clipboard-document-list" class="w-12 h-12" />
+        </div>
+        <h3 class="text-xl font-bold text-base-content">Belum Ada Laporan</h3>
+        <p class="text-base-content/60 text-sm mt-2">
+          Anda belum pernah mengirimkan laporan pengaduan. Jika Anda mengalami kendala layanan seperti jaringan lambat atau masalah sistem, silakan buat laporan baru.
+        </p>
+        <div class="card-actions mt-6">
+          <.link navigate={~p"/laporan/baru"} class="btn btn-primary px-6 shadow-md">
+            Buat Laporan Sekarang
+          </.link>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-1 gap-6">
+      <%= for laporan <- @laporan_list do %>
+        <div class="card bg-base-100 shadow-lg border border-base-200 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
+          <div class="card-body p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-base-200 pb-4 mb-4">
+              <div class="flex items-center gap-3">
+                <span class="badge badge-outline badge-md text-xs font-semibold py-3 px-4">
+                  {laporan.kategori}
+                </span>
+                <span class="text-xs text-base-content/50">
+                  {Calendar.strftime(laporan.inserted_at, "%d %B %Y - %H:%M")}
+                </span>
+              </div>
+              <div>
+                <%= case laporan.status do %>
+                  <% "Menunggu" -> %>
+                    <span class="badge badge-warning gap-1 font-semibold py-2 px-3">
+                      <span class="w-2 h-2 rounded-full bg-warning-content animate-pulse"></span>
+                      Menunggu
+                    </span>
+                  <% "Diproses" -> %>
+                    <span class="badge badge-info gap-1 font-semibold py-2 px-3">
+                      <span class="w-2 h-2 rounded-full bg-info-content animate-pulse"></span>
+                      Diproses
+                    </span>
+                  <% "Selesai" -> %>
+                    <span class="badge badge-success gap-1 font-semibold py-2 px-3">
+                      <span class="w-2 h-2 rounded-full bg-success-content"></span>
+                      Selesai
+                    </span>
+                  <% "Ditolak" -> %>
+                    <span class="badge badge-error gap-1 font-semibold py-2 px-3">
+                      <span class="w-2 h-2 rounded-full bg-error-content"></span>
+                      Ditolak
+                    </span>
+                  <% _ -> %>
+                    <span class="badge badge-ghost font-semibold py-2 px-3">{laporan.status}</span>
+                <% end %>
+              </div>
+            </div>
+
+            <h3 class="text-lg font-bold text-base-content mb-2">{laporan.judul_laporan}</h3>
+            <p class="text-base-content/80 text-sm whitespace-pre-line mb-4">{laporan.deskripsi}</p>
+
+            <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-sm text-base-content/60">
+              <div class="flex items-center gap-1.5">
+                <.icon name="hero-map-pin" class="w-4 h-4 text-base-content/40" />
+                <span>{laporan.lokasi}</span>
+              </div>
+              <%= if laporan.lampiran do %>
+                <div class="flex items-center gap-1.5">
+                  <.icon name="hero-document-arrow-down" class="w-4 h-4 text-primary" />
+                  <a href={~p"/laporan/lampiran/#{laporan.lampiran}"} target="_blank" class="link link-primary link-hover font-medium">
+                    Lihat Bukti Lampiran
+                  </a>
+                </div>
+              <% end %>
+            </div>
+
+            <%= if laporan.tanggapan_admin do %>
+              <div class="mt-4 p-4 rounded-lg bg-base-200/50 border border-base-200">
+                <div class="flex items-center gap-2 mb-1">
+                  <.icon name="hero-chat-bubble-left-right" class="w-4 h-4 text-success" />
+                  <span class="text-xs font-bold text-success uppercase tracking-wider">Tanggapan Petugas UPA TIK</span>
+                </div>
+                <p class="text-sm text-base-content/90 whitespace-pre-line">{laporan.tanggapan_admin}</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,11 +1,22 @@
 import Config
+# ini adalah mantra untuk memuat .env secara otomatis saat development
+if File.exists?(".env") do
+  for line <- File.stream!(".env", [], :line),
+      line = String.trim(line),
+      line != "",
+      not String.starts_with?(line, "#") do
+    [key, val] = String.split(line, "=", parts: 2)
+    System.put_env(String.trim(key), String.trim(val))
+  end
+end
+
 
 # Configure your database
 config :sipadu, Sipadu.Repo,
-  username: "postgres",
-  password: "Asuna123",
-  hostname: "localhost",
-  database: "pengaduan_upa_tik_dev",
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  hostname: System.get_env("POSTGRES_HOST"),
+  database: System.get_env("POSTGRES_DB"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
