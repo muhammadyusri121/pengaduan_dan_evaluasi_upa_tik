@@ -40,6 +40,21 @@ defmodule SipaduWeb.UserAuth do
   end
 
   @doc """
+  Sebuah Plug untuk memproteksi *route* admin. Jika `conn.assigns[:current_user]` tidak
+  memiliki role admin, pengguna akan diarahkan ke halaman utama.
+  """
+  def require_admin(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].role == "admin" do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Anda tidak memiliki akses ke halaman ini.")
+      |> redirect(to: "/")
+      |> halt()
+    end
+  end
+
+  @doc """
   Hook siklus hidup LiveView untuk memproteksi *route* LiveView (mirip dengan require_authenticated_user).
   """
   def on_mount(:ensure_authenticated, _params, session, socket) do
@@ -47,6 +62,22 @@ defmodule SipaduWeb.UserAuth do
       id when is_integer(id) ->
         user = Sipadu.Accounts.get_user(id)
         {:cont, Phoenix.Component.assign(socket, :current_user, user)}
+      _ ->
+        {:halt, Phoenix.LiveView.redirect(socket, to: "/login")}
+    end
+  end
+
+  def on_mount(:ensure_admin, _params, session, socket) do
+    case session["current_user"] do
+      id when is_integer(id) ->
+        user = Sipadu.Accounts.get_user(id)
+
+        if user && user.role == "admin" do
+          {:cont, Phoenix.Component.assign(socket, :current_user, user)}
+        else
+          {:halt, Phoenix.LiveView.redirect(socket, to: "/")}
+        end
+
       _ ->
         {:halt, Phoenix.LiveView.redirect(socket, to: "/login")}
     end

@@ -138,16 +138,12 @@
                   required
                   class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm"
                 >
-                  <option value="" disabled selected>Pilih Kategori Kendala</option>
-                  <option value="Jaringan / Internet (WiFi/LAN)">
-                    Jaringan / Internet (WiFi/LAN)
-                  </option>
-                  <option value="Sistem Informasi / Web Kampus">
-                    Sistem Informasi / Web Kampus
-                  </option>
-                  <option value="Perangkat Keras / Hardware">Perangkat Keras / Hardware</option>
-                  <option value="Akun / Akses (SSO/Email)">Akun / Akses (SSO/Email)</option>
-                  <option value="Lain-lain">Lain-lain</option>
+                  <option value="" disabled selected={is_nil(@form[:kategori].value)}>Pilih Kategori Kendala</option>
+                  <%= for kat <- @kategori_list do %>
+                    <option value={kat.nama} selected={@form[:kategori].value == kat.nama}>
+                      {kat.nama}
+                    </option>
+                  <% end %>
                 </select>
               </div>
 
