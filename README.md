@@ -20,11 +20,38 @@ Sipadu adalah aplikasi sistem pengaduan dan evaluasi terpadu untuk UPA TIK. Apli
 
 Sekarang Anda bisa mengakses aplikasi melalui browser di [`localhost:4000`](http://localhost:4000).
 
-## Informasi Lingkungan (Environment)
+## Menjalankan dengan Docker
 
-- **Elixir / Phoenix**: Aplikasi dibangun menggunakan Phoenix v1.8+
-- **Autentikasi**: Ueberauth Google OAuth
-- **Database**: PostgreSQL (dikelola melalui Ecto)
+Projek ini telah dilengkapi dengan konfigurasi **Docker** & **Docker Compose** untuk membangun dan menjalankan aplikasi Phoenix (`sipadu`) secara terisolasi. Kita menggunakan mode jaringan `host` agar container aplikasi dapat mengakses database PostgreSQL dan MinIO lokal yang berjalan langsung di OS laptop Anda secara lancar tanpa hambatan port-routing.
+
+### Persyaratan
+- Docker Engine & Docker Compose v2+ (Sistem Operasi Linux direkomendasikan untuk mode jaringan `host`).
+
+### Cara Menjalankan
+
+1. **Pastikan berkas `.env` sudah dikonfigurasi** (khususnya kredensial database lokal, MinIO lokal, serta Google OAuth Credentials).
+2. **Jalankan container menggunakan Docker Compose:**
+   ```bash
+   docker compose up --build
+   ```
+   Perintah ini akan secara otomatis:
+   - Membangun *production release* dari aplikasi Phoenix.
+   - Menjalankan migrasi database Ecto secara otomatis sebelum aplikasi aktif.
+
+4. **Akses Layanan:**
+   - **Aplikasi Web**: [http://localhost:4000](http://localhost:4000)
+
+### Perintah Docker Compose Penting
+
+* **Menghentikan container:**
+  ```bash
+  docker compose down
+  ```
+* **Melihat log aplikasi:**
+  ```bash
+  docker compose logs -f web
+  ```
+  ```
 
 ---
 *Dokumentasi bawaan Phoenix Framework:*
@@ -33,3 +60,4 @@ Sekarang Anda bisa mengakses aplikasi melalui browser di [`localhost:4000`](http
 * [Docs](https://hexdocs.pm/phoenix)
 * [Forum](https://elixirforum.com/c/phoenix-forum)
 * [Source](https://github.com/phoenixframework/phoenix)
+

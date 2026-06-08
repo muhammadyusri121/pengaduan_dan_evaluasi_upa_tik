@@ -1,0 +1,35 @@
+services:
+  # ==========================================
+  # Web Application (Phoenix)
+  # ==========================================
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sipadu_web
+    restart: unless-stopped
+    # Menggunakan mode host agar container berada di jaringan yang sama dengan OS laptop Anda
+    # Ini memungkinkan container mengakses localhost:5432 dan localhost:9000 langsung dari OS induk.
+    network_mode: "host"
+    environment:
+      # General
+      MIX_ENV: prod
+      PORT: 4000
+      PHX_SERVER: "true"
+      PHX_HOST: ${PHX_HOST:-localhost}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+
+      # Database Configuration
+      # Menggunakan POSTGRES_HOST dari .env (default: localhost)
+      DATABASE_URL: ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST:-localhost}:5432/${POSTGRES_DB}
+      POOL_SIZE: 10
+
+      # MinIO Configuration
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://localhost:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+
+      # Google OAuth Credentials
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
