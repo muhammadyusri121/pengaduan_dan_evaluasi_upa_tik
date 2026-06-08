@@ -1,6 +1,6 @@
 defmodule SipaduWeb.LaporanController do
   @moduledoc """
-  Controller to handle Laporan (Reporting) features, including submission and file proxying from MinIO.
+  Kontroler untuk menangani fitur Laporan Pengaduan, termasuk pengiriman form dan proxy file dari MinIO.
   """
   use SipaduWeb, :controller
 
@@ -9,7 +9,7 @@ defmodule SipaduWeb.LaporanController do
   alias Sipadu.MinioClient
 
   @doc """
-  Renders the list of reports submitted by the logged-in user.
+  Merender daftar laporan pengaduan yang dikirimkan oleh pengguna yang sedang login.
   """
   def index(conn, _params) do
     user = conn.assigns.current_user
@@ -18,13 +18,13 @@ defmodule SipaduWeb.LaporanController do
   end
 
   @doc """
-  Renders the form to create a new report.
-  Pre-populates user data from the logged-in user session.
+  Merender formulir untuk membuat pengaduan baru.
+  Mengisi otomatis bidang data diri berdasarkan sesi pengguna yang sedang login.
   """
   def new(conn, _params) do
     user = conn.assigns.current_user
 
-    # Pre-populate fields from the current user profile if available
+    # Isi bidang formulir secara default dari profil pengguna jika tersedia
     default_attrs = %{
       nama: user.name,
       nim_nip: user.nim_nip,
@@ -33,11 +33,12 @@ defmodule SipaduWeb.LaporanController do
     }
 
     changeset = Pengaduan.change_laporan(%Laporan{}, default_attrs)
-    render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset))
+    kategori_list = Pengaduan.list_kategori_aktif()
+    render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
   end
 
   @doc """
-  Handles the submission of a new report, including file upload to MinIO.
+  Menangani pengiriman laporan pengaduan baru, termasuk proses upload file ke MinIO.
   """
   def create(conn, %{"laporan" => laporan_params}) do
     user = conn.assigns.current_user
@@ -46,7 +47,7 @@ defmodule SipaduWeb.LaporanController do
     upload_result =
       case Map.get(laporan_params, "lampiran_file") do
         %Plug.Upload{} = upload ->
-          # Sanitize filename by replacing non-alphanumeric chars with underscores
+          # Sanitasi nama file dengan mengganti karakter non-alphanumeric menjadi underscore
           raw_filename = upload.filename
           ext = Path.extname(raw_filename)
           
@@ -79,7 +80,8 @@ defmodule SipaduWeb.LaporanController do
             |> redirect(to: ~p"/laporan")
 
           {:error, %Ecto.Changeset{} = changeset} ->
-            render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset))
+            kategori_list = Pengaduan.list_kategori_aktif()
+            render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
         end
 
       {:error, reason} ->
@@ -88,15 +90,16 @@ defmodule SipaduWeb.LaporanController do
           |> Pengaduan.change_laporan(laporan_params)
           |> Ecto.Changeset.add_error(:lampiran, "gagal diunggah ke penyimpanan (MinIO): #{inspect(reason)}")
 
+        kategori_list = Pengaduan.list_kategori_aktif()
         conn
         |> put_flash(:error, "Gagal mengunggah file.")
-        |> render(:new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset))
+        |> render(:new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
     end
   end
 
   @doc """
-  Proxy endpoint to serve files uploaded to MinIO.
-  Hides the MinIO URL, IP, and port from the client.
+  Endpoint proxy untuk menyajikan file yang telah diunggah ke MinIO.
+  Menyembunyikan URL, IP, dan port MinIO dari client.
   """
   def show_file(conn, %{"filename" => filename}) do
     case MinioClient.get_file(filename) do

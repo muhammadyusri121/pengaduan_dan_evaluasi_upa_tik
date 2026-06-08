@@ -14,6 +14,8 @@ defmodule Sipadu.Accounts.User do
     field :name, :string
     field :image, :string
     
+    field :role, :string, default: "user"
+    
     # Profile fields
     field :jabatan, :string
     field :nim_nip, :string
@@ -34,5 +36,15 @@ defmodule Sipadu.Accounts.User do
     |> cast(attrs, [:email, :name, :image, :jabatan, :nim_nip, :no_hp, :fakultas_unit_kerja])
     |> validate_required([:email])
     |> unique_constraint(:email)
+  end
+
+  @doc """
+  Fungsi changeset khusus untuk admin mengubah role user.
+  """
+  def admin_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
+    |> validate_inclusion(:role, ["admin", "user"])
   end
 end

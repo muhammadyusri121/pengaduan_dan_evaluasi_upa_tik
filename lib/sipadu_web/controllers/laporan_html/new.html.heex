@@ -1,69 +1,235 @@
-<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-  <div class="mb-6">
-    <.link navigate={~p"/laporan"} class="btn btn-ghost gap-2 pl-0 hover:bg-transparent hover:text-primary">
-      <.icon name="hero-arrow-left" class="w-4 h-4" />
-      Kembali ke Riwayat Pengaduan
-    </.link>
+<div class="fixed inset-0 z-50 overflow-y-auto bg-slate-50 font-sans text-slate-800 selection:bg-blue-200 selection:text-blue-900">
+  <div class="fixed top-24 right-4 sm:top-28 sm:right-6 z-[60] flex flex-col gap-3">
+    <.flash kind={:info} title="Informasi" flash={@flash} />
+    <.flash kind={:error} title="Gagal!" flash={@flash} />
   </div>
 
-  <div class="card bg-base-100 shadow-xl border border-base-200">
-    <div class="card-body p-8">
-      <.header class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-white">Form Laporan Pengaduan</h2>
-        <:subtitle>Laporkan kendala IT yang Anda hadapi untuk segera ditindaklanjuti</:subtitle>
-      </.header>
+  <div class="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden">
+    <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-[120px]">
+    </div>
+    <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[120px]">
+    </div>
+  </div>
 
-      <.form for={@form} action={~p"/laporan"} method="post" multipart={true} class="space-y-6">
-        
-        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Data Diri Pelapor</div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <.input field={@form[:nama]} type="text" label="Nama Lengkap" placeholder="Nama Anda" required />
-          <.input field={@form[:nim_nip]} type="number" label="NIM / NIP" placeholder="Masukkan NIM atau NIP" required />
-          <.input field={@form[:no_hp]} type="text" label="No. HP / WhatsApp" placeholder="Contoh: 08123456789" />
-          <.input field={@form[:fakultas_unit_kerja]} type="text" label="Fakultas / Unit Kerja" placeholder="Contoh: Fakultas Teknik" required />
+  <header class="sticky top-0 z-40 bg-white/75 backdrop-blur-xl border-b border-slate-200/60 shadow-sm supports-[backdrop-filter]:bg-white/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+      <.link href={~p"/"} class="flex items-center gap-3 cursor-pointer group">
+        <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-1.5 md:p-2 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+          <.icon name="hero-question-mark-circle" class="w-6 h-6" />
+        </div>
+        <span class="font-extrabold text-xl md:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 tracking-tight">
+          SIPADU
+        </span>
+      </.link>
+
+      <div class="flex items-center gap-4 md:gap-6">
+        <a
+          href="#"
+          class="hidden sm:block text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors duration-300"
+        >
+          Bantuan
+        </a>
+        <div class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm md:text-base shadow-sm border-2 border-white ring-2 ring-slate-100 cursor-pointer hover:scale-105 transition-transform">
+          A
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+    <div class="mb-6 md:mb-8">
+      <.link
+        navigate={~p"/"}
+        class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200 text-slate-600 text-sm font-semibold px-4 py-2 md:px-5 md:py-2.5 rounded-full hover:bg-slate-50 hover:text-blue-600 hover:border-blue-300 shadow-sm hover:shadow-md active:scale-95 transition-all duration-300"
+      >
+        <.icon name="hero-arrow-left" class="w-4 h-4 md:w-5 md:h-5" /> Kembali ke Beranda
+      </.link>
+    </div>
+
+    <div class="bg-white/80 backdrop-blur-xl p-6 sm:p-10 md:p-12 rounded-[2rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border border-white">
+      <div class="flex flex-col items-center text-center mb-10">
+        <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-3.5 rounded-2xl shadow-lg shadow-blue-500/30 mb-4 transform transition-transform hover:-translate-y-1 duration-300">
+          <.icon name="hero-document-text" class="w-7 h-7 md:w-8 md:h-8" />
+        </div>
+        <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-2 md:mb-3">
+          Form Laporan Pengaduan
+        </h2>
+        <p class="text-sm md:text-base text-slate-500 max-w-xl leading-relaxed">
+          Sampaikan kendala IT yang Anda hadapi secara detail agar tim UPA TIK dapat segera menindaklanjutinya.
+        </p>
+      </div>
+
+      <.form for={@form} action={~p"/laporan"} method="post" multipart={true} class="space-y-10">
+        <div>
+          <div class="relative flex items-center py-4 mb-4">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink-0 mx-4 text-xs md:text-sm font-extrabold tracking-widest text-blue-600 uppercase bg-blue-50 px-4 py-1.5 rounded-full">
+              Data Diri Pelapor
+            </span>
+            <div class="flex-grow border-t border-slate-200"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">Nama Lengkap</label>
+              <input
+                type="text"
+                name={@form[:nama].name}
+                value={@form[:nama].value}
+                required
+                placeholder="Masukkan nama Anda"
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">NIM / NIP</label>
+              <input
+                type="text"
+                inputmode="numeric"
+                name={@form[:nim_nip].name}
+                value={@form[:nim_nip].value}
+                required
+                placeholder="Masukkan 12 digit NIM atau NIP"
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">No. HP / WhatsApp</label>
+              <input
+                type="text"
+                name={@form[:no_hp].name}
+                value={@form[:no_hp].value}
+                placeholder="Contoh: 08123456789"
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">Fakultas / Unit Kerja</label>
+              <input
+                type="text"
+                name={@form[:fakultas_unit_kerja].name}
+                value={@form[:fakultas_unit_kerja].value}
+                required
+                placeholder="Contoh: Fakultas Teknik"
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Detail Kendala / Masalah</div>
+        <div>
+          <div class="relative flex items-center py-4 mb-4">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink-0 mx-4 text-xs md:text-sm font-extrabold tracking-widest text-blue-600 uppercase bg-blue-50 px-4 py-1.5 rounded-full">
+              Detail Permasalahan
+            </span>
+            <div class="flex-grow border-t border-slate-200"></div>
+          </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <.input field={@form[:kategori]} type="select" label="Kategori Permasalahan" 
-            options={[
-              {"Jaringan / Internet (WiFi/LAN)", "Jaringan / Internet (WiFi/LAN)"},
-              {"Sistem Informasi / Web Kampus", "Sistem Informasi / Web Kampus"},
-              {"Perangkat Keras / Hardware", "Perangkat Keras / Hardware"},
-              {"Akun / Akses (SSO/Email)", "Akun / Akses (SSO/Email)"},
-              {"Lain-lain", "Lain-lain"}
-            ]} 
-            prompt="Pilih Kategori" required />
-            
-          <.input field={@form[:lokasi]} type="text" label="Lokasi Kejadian" placeholder="Contoh: Ruang 305 Gedung Bersama" required />
+          <div class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-bold text-slate-700 ml-1">Kategori Permasalahan</label>
+                <select
+                  name={@form[:kategori].name}
+                  required
+                  class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm"
+                >
+                  <option value="" disabled selected={is_nil(@form[:kategori].value)}>Pilih Kategori Kendala</option>
+                  <%= for kat <- @kategori_list do %>
+                    <option value={kat.nama} selected={@form[:kategori].value == kat.nama}>
+                      {kat.nama}
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-bold text-slate-700 ml-1">Lokasi Kejadian</label>
+                <input
+                  type="text"
+                  name={@form[:lokasi].name}
+                  value={@form[:lokasi].value}
+                  required
+                  placeholder="Contoh: Ruang 305 Gedung Bersama"
+                  class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">Judul Pengaduan Singkat</label>
+              <input
+                type="text"
+                name={@form[:judul_laporan].name}
+                value={@form[:judul_laporan].value}
+                required
+                placeholder="Contoh: Koneksi internet lambat di lab komputer"
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-bold text-slate-700 ml-1">Deskripsi Detail</label>
+              <textarea
+                name={@form[:deskripsi].name}
+                required
+                rows="5"
+                placeholder="Jelaskan detail masalah, kapan mulai terjadi, dan dampaknya pada pekerjaan/kuliah Anda..."
+                class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
+              ><%= @form[:deskripsi].value %></textarea>
+            </div>
+          </div>
         </div>
 
-        <.input field={@form[:judul_laporan]} type="text" label="Judul Pengaduan" placeholder="Contoh: Koneksi internet lambat di lab komputer" required />
-        
-        <.input field={@form[:deskripsi]} type="textarea" label="Deskripsi Detail Permasalahan" placeholder="Jelaskan detail masalah, kapan mulai terjadi, dan dampaknya..." rows="5" required />
+        <div>
+          <div class="relative flex items-center py-4 mb-4">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink-0 mx-4 text-xs md:text-sm font-extrabold tracking-widest text-blue-600 uppercase bg-blue-50 px-4 py-1.5 rounded-full">
+              Bukti Lampiran
+            </span>
+            <div class="flex-grow border-t border-slate-200"></div>
+          </div>
 
-        <div class="divider text-xs font-semibold uppercase tracking-wider text-base-content/40">Bukti Lampiran</div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-bold text-slate-700 ml-1">
+              Upload Gambar / File <span class="text-slate-400 font-normal">(Opsional)</span>
+            </label>
 
-        <div class="form-control w-full">
-          <label class="label">
-            <span class="label-text font-semibold text-white">Upload Gambar / File Pendukung (Opsional)</span>
-            <span class="label-text-alt text-white">Maks 5MB</span>
-          </label>
-          <input type="file" name="laporan[lampiran_file]" id="lampiran_file" class="file-input file-input-bordered file-input-primary w-full text-white" accept="image/*,.pdf,.doc,.docx" />
-          <label class="label">
-            <span class="label-text-alt text-base-content/50">Dapat berupa screenshot speedtest, bukti error, atau foto kerusakan fisik.</span>
-          </label>
+            <input
+              type="file"
+              name="laporan[lampiran_file]"
+              id="lampiran_file"
+              accept="image/*,.pdf,.doc,.docx"
+              class="block w-full text-sm text-slate-600
+                file:mr-4 file:py-3.5 file:px-6
+                file:rounded-xl file:border-0
+                file:text-sm file:font-bold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100 cursor-pointer
+                border border-slate-200 rounded-2xl p-1.5 bg-white shadow-sm focus:ring-2 focus:ring-blue-500/20 transition-all"
+            />
+
+            <p class="mt-1 text-xs text-slate-500 flex items-center gap-1.5 ml-1">
+              <.icon name="hero-information-circle" class="w-4 h-4 text-blue-500" />
+              Maksimal 5MB (Bisa berupa screenshot error atau foto fisik).
+            </p>
+          </div>
         </div>
 
-        <div class="form-control mt-8">
-          <button type="submit" class="btn btn-primary w-full text-lg shadow-lg hover:shadow-primary/50 transition-all gap-2">
-            <.icon name="hero-paper-airplane" class="w-5 h-5" />
+        <div class="pt-6">
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-base md:text-lg font-bold px-8 py-4 rounded-full shadow-[0_8px_20px_rgb(37,99,235,0.25)] hover:shadow-[0_10px_25px_rgb(37,99,235,0.35)] hover:-translate-y-1 active:scale-95 transition-all duration-300"
+          >
+            <.icon name="hero-paper-airplane" class="w-5 h-5 md:w-6 md:h-6" />
             Kirim Laporan Pengaduan
           </button>
         </div>
       </.form>
     </div>
-  </div>
+  </main>
 </div>

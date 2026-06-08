@@ -64,4 +64,35 @@ defmodule Sipadu.Accounts do
     |> User.changeset(attrs)
     |> Repo.update()
   end
+
+  @doc """
+  Mengembalikan daftar semua user diurutkan berdasarkan nama.
+  """
+  def list_users do
+    User
+    |> order_by(asc: :name)
+    |> Repo.all()
+  end
+
+  @doc """
+  Memperbarui role dari seorang user.
+  """
+  def update_user_role(%User{} = user, role) do
+    user
+    |> User.admin_changeset(%{role: role})
+    |> Repo.update()
+  end
+
+  @doc """
+  Memeriksa apakah user memiliki role admin.
+  """
+  def admin?(%User{role: "admin"}), do: true
+  def admin?(_), do: false
+
+  @doc """
+  Menghitung jumlah total user di sistem.
+  """
+  def count_users do
+    Repo.aggregate(User, :count)
+  end
 end
