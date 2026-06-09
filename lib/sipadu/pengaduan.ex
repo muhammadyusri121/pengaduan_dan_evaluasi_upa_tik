@@ -135,8 +135,23 @@ defmodule Sipadu.Pengaduan do
   Fungsi khusus admin untuk memperbarui laporan (misal mengubah status & tanggapan).
   """
   def admin_update_laporan(%Laporan{} = laporan, attrs) do
+    attrs = ensure_di_respon_status(laporan, attrs)
+
     laporan
     |> Laporan.changeset(attrs)
     |> Repo.update()
+  end
+
+  defp ensure_di_respon_status(%Laporan{status: current_status}, attrs) do
+    has_response =
+      attrs["tanggapan_admin"] not in [nil, ""] || attrs[:tanggapan_admin] not in [nil, ""]
+
+    selected_status = attrs["status"] || attrs[:status] || current_status
+
+    if has_response && selected_status in ["Menunggu", "Diproses"] do
+      Map.put(attrs, "status", "Di Respon")
+    else
+      attrs
+    end
   end
 end

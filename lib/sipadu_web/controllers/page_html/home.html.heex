@@ -1,128 +1,119 @@
-  <main class="relative z-10 pt-12 md:pt-20 pb-16 md:pb-24 px-4 flex flex-col items-center text-center">
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100/50 text-blue-600 text-xs sm:text-sm font-semibold mb-6 md:mb-8 shadow-sm transition-transform hover:scale-105 duration-300 cursor-default">
-      <span class="relative flex h-2.5 w-2.5">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75">
-        </span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-      </span>
-      Layanan IT Support Aktif
+<main class="relative z-10 pt-12 md:pt-20 pb-16 md:pb-24 px-4 flex flex-col items-center text-center">
+  <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-5 md:mb-6 tracking-tight max-w-4xl leading-[1.2] md:leading-[1.15]">
+    Ada yang bisa kami
+    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
+      bantu
+    </span>
+    hari ini?
+  </h1>
+  <p class="text-slate-500 mb-8 md:mb-12 text-sm sm:text-base md:text-lg max-w-2xl px-4">
+    Cari solusi masalah IT Anda di sini atau laporkan kendala baru untuk segera ditangani oleh tim ahli kami.
+  </p>
+
+  <div class="relative w-full max-w-[95%] md:max-w-2xl group z-20">
+    <div class="absolute inset-y-0 left-0 pl-4 md:pl-5 flex items-center pointer-events-none transition-colors duration-300">
+      <.icon
+        name="hero-magnifying-glass"
+        class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors"
+      />
+    </div>
+    <input
+      type="text"
+      placeholder="Ketik: Wi-Fi putus, email error..."
+      class="block w-full pl-11 md:pl-14 pr-16 md:pr-24 py-3.5 md:py-5 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus:shadow-[0_8px_30px_rgb(37,99,235,0.15)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 outline-none text-slate-700 transition-all duration-300 text-sm md:text-base placeholder:text-slate-400"
+    />
+    <div class="absolute inset-y-0 right-1.5 md:right-2 flex items-center">
+      <button class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white p-2 md:px-4 md:py-2.5 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 group-focus-within:bg-blue-700">
+        <span class="hidden md:inline-block text-sm font-semibold">Cari</span>
+        <.icon name="hero-arrow-right" class="h-4 w-4 md:h-5 md:w-5" />
+      </button>
+    </div>
+  </div>
+</main>
+
+<section class="py-12 md:py-16 px-4 relative z-10">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10 md:mb-14">
+      <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+        Jelajahi Topik Bantuan
+      </h2>
+      <p class="text-slate-500 mt-2 text-sm md:text-base">
+        Pilih kategori yang sesuai dengan kendala Anda
+      </p>
     </div>
 
-    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-5 md:mb-6 tracking-tight max-w-4xl leading-[1.2] md:leading-[1.15]">
-      Ada yang bisa kami
-      <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-        bantu
-      </span>
-      hari ini?
-    </h1>
-    <p class="text-slate-500 mb-8 md:mb-12 text-sm sm:text-base md:text-lg max-w-2xl px-4">
-      Cari solusi masalah IT Anda di sini atau laporkan kendala baru untuk segera ditangani oleh tim ahli kami.
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <%= for cat <- @kategori do %>
+        <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(37,99,235,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex items-start gap-4 md:gap-5 cursor-pointer group">
+          <div class="bg-blue-50/80 p-3 md:p-3.5 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-md group-hover:shadow-blue-500/30 transition-all duration-300 shrink-0">
+            <.icon
+              name={cat.icon}
+              class="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
+            />
+          </div>
+          <div class="text-left pt-0.5">
+            <h3 class="font-bold text-slate-800 text-sm md:text-base mb-1 md:mb-1.5 group-hover:text-blue-600 transition-colors">
+              {cat.nama}
+            </h3>
+            <p class="text-xs md:text-sm text-slate-500 leading-relaxed">{cat.desc}</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="py-12 md:py-16 px-4 relative z-10">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-8 md:mb-12">
+      <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+        Pertanyaan Populer
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-3 md:gap-4">
+      <%= for item <- @faq do %>
+        <details class="group bg-white border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+          <summary class="flex items-center justify-between font-semibold text-slate-800 py-4 md:py-5 px-5 md:px-6 cursor-pointer select-none group-hover:text-blue-600 transition-colors text-sm md:text-[15px]">
+            <span class="pr-4">{item.q}</span>
+            <span class="flex-shrink-0 transition-transform duration-300 group-open:rotate-180 bg-slate-50 p-1.5 md:p-2 rounded-full group-hover:bg-blue-50">
+              <.icon
+                name="hero-chevron-down"
+                class="h-4 w-4 md:h-5 md:w-5 text-slate-400 group-hover:text-blue-600"
+              />
+            </span>
+          </summary>
+          <div class="text-xs md:text-sm text-slate-600 px-5 md:px-6 pb-5 md:pb-6 pt-1 md:pt-2 border-t border-slate-50 bg-slate-50/30 leading-relaxed">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 md:py-24 px-4 mt-8 md:mt-12 relative overflow-hidden z-10">
+  <div class="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-800 -z-10">
+  </div>
+  <div
+    class="absolute inset-0 opacity-10 mix-blend-overlay -z-10"
+    style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"
+  >
+  </div>
+
+  <div class="max-w-4xl mx-auto text-center px-4">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight leading-snug">
+      Masih butuh bantuan?
+    </h2>
+    <p class="text-blue-100/90 mb-8 md:mb-10 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+      Tim UPA TIK siap membantu menyelesaikan masalah Anda. Buat tiket laporan sekarang dan pantau statusnya secara realtime.
     </p>
 
-    <div class="relative w-full max-w-[95%] md:max-w-2xl group z-20">
-      <div class="absolute inset-y-0 left-0 pl-4 md:pl-5 flex items-center pointer-events-none transition-colors duration-300">
-        <.icon
-          name="hero-magnifying-glass"
-          class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors"
-        />
-      </div>
-      <input
-        type="text"
-        placeholder="Ketik: Wi-Fi putus, email error..."
-        class="block w-full pl-11 md:pl-14 pr-16 md:pr-24 py-3.5 md:py-5 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus:shadow-[0_8px_30px_rgb(37,99,235,0.15)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 outline-none text-slate-700 transition-all duration-300 text-sm md:text-base placeholder:text-slate-400"
-      />
-      <div class="absolute inset-y-0 right-1.5 md:right-2 flex items-center">
-        <button class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white p-2 md:px-4 md:py-2.5 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 group-focus-within:bg-blue-700">
-          <span class="hidden md:inline-block text-sm font-semibold">Cari</span>
-          <.icon name="hero-arrow-right" class="h-4 w-4 md:h-5 md:w-5" />
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <section class="py-12 md:py-16 px-4 relative z-10">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-10 md:mb-14">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-          Jelajahi Topik Bantuan
-        </h2>
-        <p class="text-slate-500 mt-2 text-sm md:text-base">
-          Pilih kategori yang sesuai dengan kendala Anda
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        <%= for cat <- @kategori do %>
-          <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(37,99,235,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex items-start gap-4 md:gap-5 cursor-pointer group">
-            <div class="bg-blue-50/80 p-3 md:p-3.5 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-md group-hover:shadow-blue-500/30 transition-all duration-300 shrink-0">
-              <.icon
-                name={cat.icon}
-                class="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-            <div class="text-left pt-0.5">
-              <h3 class="font-bold text-slate-800 text-sm md:text-base mb-1 md:mb-1.5 group-hover:text-blue-600 transition-colors">
-                {cat.nama}
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 leading-relaxed">{cat.desc}</p>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-12 md:py-16 px-4 relative z-10">
-    <div class="max-w-3xl mx-auto">
-      <div class="text-center mb-8 md:mb-12">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-          Pertanyaan Populer
-        </h2>
-      </div>
-
-      <div class="flex flex-col gap-3 md:gap-4">
-        <%= for item <- @faq do %>
-          <details class="group bg-white border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-            <summary class="flex items-center justify-between font-semibold text-slate-800 py-4 md:py-5 px-5 md:px-6 cursor-pointer select-none group-hover:text-blue-600 transition-colors text-sm md:text-[15px]">
-              <span class="pr-4">{item.q}</span>
-              <span class="flex-shrink-0 transition-transform duration-300 group-open:rotate-180 bg-slate-50 p-1.5 md:p-2 rounded-full group-hover:bg-blue-50">
-                <.icon
-                  name="hero-chevron-down"
-                  class="h-4 w-4 md:h-5 md:w-5 text-slate-400 group-hover:text-blue-600"
-                />
-              </span>
-            </summary>
-            <div class="text-xs md:text-sm text-slate-600 px-5 md:px-6 pb-5 md:pb-6 pt-1 md:pt-2 border-t border-slate-50 bg-slate-50/30 leading-relaxed">
-              <p>{item.a}</p>
-            </div>
-          </details>
-        <% end %>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-24 px-4 mt-8 md:mt-12 relative overflow-hidden z-10">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-800 -z-10">
-    </div>
-    <div
-      class="absolute inset-0 opacity-10 mix-blend-overlay -z-10"
-      style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"
+    <.link
+      href={~p"/laporan/baru"}
+      class="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-6 md:px-8 py-3.5 md:py-4 rounded-full text-sm md:text-[15px] shadow-[0_8px_30px_rgb(255,255,255,0.2)] hover:shadow-[0_8px_30px_rgb(255,255,255,0.35)] hover:-translate-y-1 active:scale-95 transition-all duration-300 w-full sm:w-auto"
     >
-    </div>
-
-    <div class="max-w-4xl mx-auto text-center px-4">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight leading-snug">
-        Masih butuh bantuan?
-      </h2>
-      <p class="text-blue-100/90 mb-8 md:mb-10 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
-        Tim UPA TIK siap membantu menyelesaikan masalah Anda. Buat tiket laporan sekarang dan pantau statusnya secara realtime.
-      </p>
-
-      <.link
-        href={~p"/laporan/baru"}
-        class="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-6 md:px-8 py-3.5 md:py-4 rounded-full text-sm md:text-[15px] shadow-[0_8px_30px_rgb(255,255,255,0.2)] hover:shadow-[0_8px_30px_rgb(255,255,255,0.35)] hover:-translate-y-1 active:scale-95 transition-all duration-300 w-full sm:w-auto"
-      >
-        Buat Laporan Baru
-      </.link>
-    </div>
-  </section>
+      Buat Laporan Baru
+    </.link>
+  </div>
+</section>

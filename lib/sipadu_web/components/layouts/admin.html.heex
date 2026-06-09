@@ -1,84 +1,188 @@
-<div class="min-h-screen bg-slate-50 flex flex-col md:flex-row">
-  <!-- Mobile Header -->
-  <header class="bg-indigo-900 text-white px-4 py-3 flex items-center justify-between md:hidden shadow-md">
+<div class="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-900 selection:bg-blue-200 selection:text-blue-900">
+  <.flash_group flash={@flash} />
+
+  <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-5 py-4 flex items-center justify-between md:hidden shadow-sm sticky top-0 z-40 supports-[backdrop-filter]:bg-white/60">
     <div class="flex items-center gap-3">
-      <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" alt="SIPADU Logo" />
-      <span class="font-bold text-lg tracking-wider">SIPADU ADMIN</span>
+      <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 p-1.5 rounded-lg shadow-sm">
+        <img
+          src={~p"/images/logo.svg"}
+          class="w-6 h-6 filter brightness-0 invert"
+          alt="SIPADU Logo"
+        />
+      </div>
+      <span class="font-extrabold text-xl tracking-tight text-slate-900">
+        SIPADU <span class="text-blue-600">ADMIN</span>
+      </span>
     </div>
     <button
       type="button"
       phx-click={JS.toggle(to: "#mobile-sidebar")}
-      class="text-slate-200 hover:text-white focus:outline-none"
+      class="text-slate-500 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 p-2 rounded-xl focus:outline-none transition-all active:scale-95 border border-slate-200/60"
     >
-      <.icon name="hero-bars-3" class="w-6 h-6" />
+      <.icon name="hero-bars-3-bottom-right" class="w-6 h-6" />
     </button>
   </header>
 
-  <!-- Mobile Sidebar Overlay (Initially hidden) -->
-  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 flex md:hidden bg-slate-900/50 backdrop-blur-sm">
-    <div class="w-64 bg-slate-900 text-slate-300 flex flex-col h-full shadow-2xl relative">
-      <div class="px-6 py-5 border-b border-slate-800 flex items-center justify-between">
+  <div
+    id="mobile-sidebar"
+    class="hidden fixed inset-0 z-50 flex md:hidden bg-slate-900/40 backdrop-blur-sm transition-opacity"
+  >
+    <div class="w-[280px] bg-white text-slate-900 flex flex-col h-full shadow-2xl relative border-r border-slate-100 transform transition-transform duration-300">
+      <div class="px-6 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
         <div class="flex items-center gap-3">
-          <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" />
-          <span class="font-bold text-lg text-white">SIPADU Admin</span>
+          <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 p-1.5 rounded-lg shadow-sm">
+            <img src={~p"/images/logo.svg"} class="w-6 h-6 filter brightness-0 invert" alt="Logo" />
+          </div>
+          <span class="font-extrabold text-lg tracking-tight text-slate-900">
+            SIPADU <span class="text-blue-600 text-base">ADMIN</span>
+          </span>
         </div>
-        <button phx-click={JS.toggle(to: "#mobile-sidebar")} class="text-slate-400 hover:text-white">
-          <.icon name="hero-x-mark" class="w-6 h-6" />
+        <button
+          phx-click={JS.toggle(to: "#mobile-sidebar")}
+          class="text-slate-400 hover:text-rose-600 bg-white hover:bg-rose-50 p-1.5 rounded-lg transition-all border border-slate-200/60 shadow-sm"
+        >
+          <.icon name="hero-x-mark" class="w-5 h-5" />
         </button>
       </div>
 
-      <!-- Navigation Links Mobile -->
-      <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto hide-scrollbar">
         <.admin_nav_links />
       </nav>
 
-      <!-- Admin User Info Mobile -->
-      <div class="p-4 border-t border-slate-800 flex items-center gap-3">
-        <img src={@current_user.image} class="w-10 h-10 rounded-full border-2 border-indigo-500" />
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-white truncate">{@current_user.name}</p>
-          <p class="text-xs text-slate-400 truncate">{@current_user.email}</p>
-        </div>
+      <div class="p-5 border-t border-slate-100 bg-slate-50/50">
+        <button
+          type="button"
+          phx-click={JS.show(to: "#admin-logout-modal")}
+          class="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/60 shadow-sm hover:shadow-md hover:border-rose-200 transition-all text-left group"
+        >
+          <img
+            src={@current_user.image}
+            class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover"
+          />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold text-slate-800 truncate group-hover:text-rose-600 transition-colors">
+              {@current_user.name}
+            </p>
+            <p class="text-xs font-medium text-slate-400 truncate">Keluar Sistem</p>
+          </div>
+          <.icon
+            name="hero-arrow-right-on-rectangle"
+            class="w-5 h-5 text-slate-400 group-hover:text-rose-600 transition-colors"
+          />
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Desktop Sidebar -->
-  <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-slate-900 text-slate-300 shadow-xl border-r border-slate-800">
-    <!-- Header -->
-    <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
-      <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" alt="SIPADU Logo" />
-      <span class="font-bold text-lg tracking-wider text-white">SIPADU ADMIN</span>
+  <aside class="hidden md:flex md:w-[280px] md:flex-col md:fixed md:inset-y-0 bg-white shadow-[2px_0_24px_rgb(0,0,0,0.02)] border-r border-slate-100/80 z-30 transition-all duration-300">
+    <div class="px-8 py-8 border-b border-slate-100/80 flex items-center gap-3 bg-white">
+      <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 p-2 rounded-xl shadow-[0_4px_10px_rgb(37,99,235,0.2)]">
+        <img
+          src={~p"/images/logo.svg"}
+          class="w-7 h-7 filter brightness-0 invert"
+          alt="SIPADU Logo"
+        />
+      </div>
+      <span class="font-extrabold text-2xl tracking-tight text-slate-900">
+        SIPADU <span class="text-blue-600 text-lg">ADMIN</span>
+      </span>
     </div>
 
-    <!-- Navigation Links Desktop -->
-    <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+    <nav class="flex-1 px-5 py-6 space-y-2 overflow-y-auto hide-scrollbar">
       <.admin_nav_links />
     </nav>
 
-    <!-- Theme and User profile -->
-    <div class="p-4 border-t border-slate-800 space-y-4">
-      <div class="flex items-center justify-between">
-        <span class="text-xs font-medium text-slate-400">TEMA</span>
-        <.theme_toggle />
-      </div>
-      
-      <div class="flex items-center gap-3 bg-slate-850 p-2 rounded-lg">
-        <img src={@current_user.image} class="w-10 h-10 rounded-full border border-indigo-500" />
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-white truncate">{@current_user.name}</p>
-          <p class="text-xs text-slate-400 truncate">{@current_user.email}</p>
+    <div class="p-6 border-t border-slate-100/80 bg-white">
+      <button
+        type="button"
+        phx-click={JS.show(to: "#admin-logout-modal")}
+        class="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 hover:shadow-[0_4px_15px_rgb(0,0,0,0.03)] border border-transparent hover:border-slate-100 transition-all duration-300 group cursor-pointer text-left"
+      >
+        <div class="relative">
+          <img
+            src={@current_user.image}
+            class="w-11 h-11 rounded-full border-[3px] border-white shadow-sm group-hover:border-rose-50 transition-colors object-cover"
+            alt="User Avatar"
+          />
+          <span class="absolute bottom-0.5 right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full">
+          </span>
         </div>
-      </div>
+
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-extrabold text-slate-800 truncate group-hover:text-rose-600 transition-colors">
+            {@current_user.name}
+          </p>
+          <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest truncate group-hover:text-rose-500 transition-colors mt-0.5">
+            Klik untuk Keluar
+          </p>
+        </div>
+
+        <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-rose-100 group-hover:text-rose-600 transition-colors">
+          <.icon name="hero-arrow-right-on-rectangle" class="w-4 h-4" />
+        </div>
+      </button>
     </div>
   </aside>
 
-  <!-- Main Content Wrapper -->
-  <div class="flex-1 flex flex-col md:pl-64">
-    <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+  <div class="flex-1 flex flex-col md:pl-[280px] transition-all duration-300">
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-none relative z-10">
       {@inner_content}
     </main>
   </div>
-</div>
 
-<.flash_group flash={@flash} />
+  <div
+    id="admin-logout-modal"
+    class="hidden relative z-[100]"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+      phx-click={JS.hide(to: "#admin-logout-modal")}
+    >
+    </div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+          <div class="bg-white px-6 pb-6 pt-8 sm:p-8">
+            <div class="sm:flex sm:items-start gap-5">
+              <div class="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-rose-50 sm:mx-0 sm:h-14 sm:w-14">
+                <.icon name="hero-arrow-right-on-rectangle" class="h-7 w-7 text-rose-600" />
+              </div>
+
+              <div class="mt-4 text-center sm:ml-4 sm:mt-0 sm:text-left flex-1">
+                <h3 class="text-xl font-extrabold leading-6 text-slate-900" id="modal-title">
+                  Konfirmasi Keluar
+                </h3>
+                <div class="mt-3">
+                  <p class="text-sm text-slate-500 leading-relaxed">
+                    Apakah Anda yakin ingin mengakhiri sesi admin dan keluar dari sistem SIPADU?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 px-6 py-5 sm:flex sm:flex-row-reverse gap-3 border-t border-slate-100">
+            <.link
+              href={~p"/auth/signout"}
+              class="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-rose-600 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-rose-700 sm:w-auto transition-all active:scale-95"
+            >
+              Ya, Keluar
+            </.link>
+
+            <button
+              type="button"
+              phx-click={JS.hide(to: "#admin-logout-modal")}
+              class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 sm:mt-0 sm:w-auto transition-colors"
+            >
+              Batal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
