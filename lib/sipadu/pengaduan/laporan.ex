@@ -46,6 +46,6 @@ defmodule Sipadu.Pengaduan.Laporan do
       :deskripsi,
       :lokasi
     ])
-    |> validate_inclusion(:status, ["Menunggu", "Diproses", "Selesai", "Ditolak"])
+    |> validate_inclusion(:status, ["Menunggu", "Diproses", "Di Respon", "Selesai", "Ditolak"])
   end
 end

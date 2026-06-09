@@ -9,19 +9,40 @@ defmodule SipaduWeb.SurveiController do
 
   @doc """
   Merender halaman form survei.
-  Menginisiasi changeset kosong untuk digunakan di dalam form.
+  Menginisiasi changeset untuk digunakan di dalam form beserta data bawaan dari user.
   """
   def index(conn, _params) do
-    changeset = Surveys.change_evaluasi_layanan(%EvaluasiLayanan{})
-    render(conn, :index, page_title: "Evaluasi Survei", form: Phoenix.Component.to_form(changeset))
+    # 1. Ambil data user yang sedang login dari assigns
+    user = conn.assigns[:current_user]
+
+    # 2. Buat map default_attrs jika user ada, jika tidak biarkan kosong
+    default_attrs =
+      if user do
+        %{
+          nama: user.name,
+          nim_nip: user.nim_nip
+          # Tambahkan field lain di sini jika skema EvaluasiLayanan membutuhkannya
+          # misalnya: fakultas_unit_kerja: user.fakultas_unit_kerja
+        }
+      else
+        %{}
+      end
+
+    # 3. Masukkan default_attrs ke dalam fungsi change_evaluasi_layanan
+    changeset = Surveys.change_evaluasi_layanan(%EvaluasiLayanan{}, default_attrs)
+
+    render(conn, :index,
+      page_title: "Evaluasi Survei",
+      form: Phoenix.Component.to_form(changeset)
+    )
   end
-  
+
   @doc """
   Memproses data survei yang dikirimkan melalui form.
   Menyimpan data ke database dan menampilkan pesan sukses atau error.
   """
   def create(conn, %{"evaluasi_layanan" => survei_params}) do
-    # Add user_id from conn.assigns.current_user if it exists
+    # Mengambil user_id secara aman
     user_id = if conn.assigns[:current_user], do: conn.assigns.current_user.id, else: nil
     survei_params = Map.put(survei_params, "user_id", user_id)
 
@@ -32,7 +53,10 @@ defmodule SipaduWeb.SurveiController do
         |> redirect(to: ~p"/survei")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :index, page_title: "Evaluasi Survei", form: Phoenix.Component.to_form(changeset))
+        render(conn, :index,
+          page_title: "Evaluasi Survei",
+          form: Phoenix.Component.to_form(changeset)
+        )
     end
   end
 end

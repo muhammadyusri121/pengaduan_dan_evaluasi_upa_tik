@@ -40,23 +40,28 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="max-w-7xl mx-auto pb-12">
+      <!-- Header & Filters -->
+      <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-8">
         <div>
-          <h1 class="text-2xl font-bold text-slate-900">Laporan Pengaduan</h1>
-          <p class="text-sm text-slate-500 mt-1">Kelola dan tanggapi seluruh laporan pengaduan pengguna.</p>
+          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Daftar Pengaduan</h1>
+          <p class="text-base text-slate-500 mt-1.5">
+            Kelola, pantau, dan tanggapi semua laporan yang masuk ke sistem.
+          </p>
         </div>
         
-        <!-- Filter Tabs/Buttons -->
-        <div class="flex flex-wrap gap-2">
-          <%= for status <- ["Semua", "Menunggu", "Diproses", "Selesai", "Ditolak"] do %>
+    <!-- Filter Tabs / Segmented Control -->
+        <div class="inline-flex bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 overflow-x-auto max-w-full hide-scrollbar">
+          <%= for status <- ["Semua", "Menunggu", "Diproses", "Di Respon", "Selesai", "Ditolak"] do %>
             <button
               phx-click="filter"
               phx-value-status={status}
               class={[
-                "px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition-all duration-200 border",
-                @selected_status == status && "bg-indigo-600 text-white border-indigo-600 shadow-sm",
-                @selected_status != status && "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-350"
+                "px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 whitespace-nowrap",
+                @selected_status == status &&
+                  "bg-white text-blue-700 shadow-[0_2px_10px_rgb(0,0,0,0.06)] border border-slate-100",
+                @selected_status != status &&
+                  "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
               ]}
             >
               {status}
@@ -64,50 +69,89 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
           <% end %>
         </div>
       </div>
-
-      <!-- Laporan List Table -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      
+    <!-- Laporan Table Card -->
+      <div class="bg-white rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                <th class="px-6 py-4">Tanggal Masuk</th>
-                <th class="px-6 py-4">Pelapor</th>
-                <th class="px-6 py-4">Kategori & Judul</th>
-                <th class="px-6 py-4 text-center">Status</th>
-                <th class="px-6 py-4 text-right">Aksi</th>
+              <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] font-extrabold text-slate-500 uppercase tracking-widest">
+                <th class="px-8 py-5">Tanggal Masuk</th>
+                <th class="px-8 py-5">Pelapor</th>
+                <th class="px-8 py-5">Kategori & Judul</th>
+                <th class="px-8 py-5 text-center">Status</th>
+                <th class="px-8 py-5 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody id="laporan-table" phx-update="stream" class="divide-y divide-slate-150">
+            <tbody id="laporan-table" phx-update="stream" class="divide-y divide-slate-100">
+              <!-- Empty State Row -->
               <tr id="empty-row" class="hidden only:table-row">
-                <td colspan="5" class="px-6 py-12 text-center text-slate-400">
-                  Tidak ada laporan pengaduan dengan status "{@selected_status}".
+                <td colspan="5" class="px-8 py-20 text-center">
+                  <div class="flex flex-col items-center justify-center max-w-sm mx-auto">
+                    <div class="bg-slate-50 p-5 rounded-full mb-5">
+                      <.icon name="hero-inbox" class="w-10 h-10 text-slate-400" />
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">Tidak ada data</h3>
+                    <p class="text-sm text-slate-500">
+                      Saat ini tidak ada laporan pengaduan dengan status <span class="font-bold text-slate-700">"{@selected_status}"</span>.
+                    </p>
+                  </div>
                 </td>
               </tr>
-              <tr :for={{id, lap} <- @streams.laporan_list} id={id} class="hover:bg-slate-50/50 transition">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {Calendar.strftime(lap.inserted_at, "%d %b %Y, %H:%M")}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-slate-900">{lap.nama}</div>
-                  <div class="text-xs text-slate-500">{lap.nim_nip}</div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-xs font-medium text-indigo-650 bg-indigo-50 border border-indigo-100 rounded-md px-2 py-0.5 w-fit">
-                    {lap.kategori}
+              
+    <!-- Data Rows -->
+              <tr
+                :for={{id, lap} <- @streams.laporan_list}
+                id={id}
+                class="hover:bg-slate-50/80 transition-colors group"
+              >
+                <!-- Tanggal -->
+                <td class="px-8 py-5 whitespace-nowrap">
+                  <div class="text-sm font-bold text-slate-700">
+                    {Calendar.strftime(lap.inserted_at, "%d %b %Y")}
                   </div>
-                  <div class="text-sm font-bold text-slate-850 mt-1">{lap.judul_laporan}</div>
+                  <div class="text-xs font-medium text-slate-400 mt-0.5">
+                    {Calendar.strftime(lap.inserted_at, "%H:%M")} WIB
+                  </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
+                
+    <!-- Pelapor -->
+                <td class="px-8 py-5 whitespace-nowrap">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
+                      <.icon name="hero-user" class="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-slate-800">{lap.nama}</div>
+                      <div class="text-xs font-medium text-slate-400 mt-0.5">{lap.nim_nip}</div>
+                    </div>
+                  </div>
+                </td>
+                
+    <!-- Kategori & Judul -->
+                <td class="px-8 py-5">
+                  <div class="flex flex-col gap-2">
+                    <div class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold w-fit">
+                      {lap.kategori}
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 line-clamp-1">
+                      {lap.judul_laporan}
+                    </div>
+                  </div>
+                </td>
+                
+    <!-- Status -->
+                <td class="px-8 py-5 whitespace-nowrap text-center">
                   <.status_badge status={lap.status} />
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                
+    <!-- Aksi -->
+                <td class="px-8 py-5 whitespace-nowrap text-right">
                   <.link
                     navigate={~p"/admin/laporan/#{lap.id}"}
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm"
                   >
-                    <.icon name="hero-eye" class="w-4 h-4" />
-                    Detail & Tanggapi
+                    Tindak Lanjuti <.icon name="hero-arrow-right" class="w-4 h-4" />
                   </.link>
                 </td>
               </tr>
@@ -122,12 +166,22 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
   defp status_badge(assigns) do
     ~H"""
     <span class={[
-      "px-2.5 py-1 rounded-full text-xs font-semibold tracking-wider border",
-      @status == "Menunggu" && "text-amber-800 bg-amber-100 border-amber-200",
-      @status == "Diproses" && "text-blue-800 bg-blue-100 border-blue-200",
-      @status == "Selesai" && "text-emerald-800 bg-emerald-100 border-emerald-200",
-      @status == "Ditolak" && "text-rose-800 bg-rose-100 border-rose-200"
+      "px-3 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm flex items-center justify-center gap-1.5 w-fit mx-auto",
+      @status == "Menunggu" && "text-amber-700 bg-amber-50 border border-amber-200",
+      @status == "Diproses" && "text-blue-700 bg-blue-50 border border-blue-200",
+      @status == "Di Respon" && "text-violet-700 bg-violet-50 border border-violet-200",
+      @status == "Selesai" && "text-emerald-700 bg-emerald-50 border border-emerald-200",
+      @status == "Ditolak" && "text-rose-700 bg-rose-50 border border-rose-200"
     ]}>
+      <span class={[
+        "w-1.5 h-1.5 rounded-full",
+        @status == "Menunggu" && "bg-amber-500",
+        @status == "Diproses" && "bg-blue-500",
+        @status == "Di Respon" && "bg-violet-500",
+        @status == "Selesai" && "bg-emerald-500",
+        @status == "Ditolak" && "bg-rose-500"
+      ]}>
+      </span>
       {@status}
     </span>
     """

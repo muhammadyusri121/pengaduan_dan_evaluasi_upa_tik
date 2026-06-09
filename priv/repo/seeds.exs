@@ -1,15 +1,3 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Sipadu.Repo.insert!(%Sipadu.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
-
 alias Sipadu.Repo
 alias Sipadu.Accounts
 alias Sipadu.Pengaduan
@@ -42,8 +30,6 @@ for attrs <- kategori_defaults do
 end
 
 IO.puts("\n=== SEEDING ADMIN USER ===")
-# Petunjuk: Ganti email di bawah ini dengan email Google OAuth Anda untuk menjadi admin pertama.
-# Contoh: admin_email = "nama.anda@student.trunojoyo.ac.id" atau "nama.anda@trunojoyo.ac.id"
 admin_email = "230441100192@student.trunojoyo.ac.id"
 
 case Accounts.get_user_by_email(admin_email) do

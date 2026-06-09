@@ -10,17 +10,21 @@ defmodule SipaduWeb.Admin.DashboardLive do
     total_laporan = Pengaduan.count_laporan()
     menunggu = Pengaduan.count_laporan_by_status("Menunggu")
     diproses = Pengaduan.count_laporan_by_status("Diproses")
+    di_respon = Pengaduan.count_laporan_by_status("Di Respon")
     selesai = Pengaduan.count_laporan_by_status("Selesai")
     ditolak = Pengaduan.count_laporan_by_status("Ditolak")
-    
+
     total_users = Accounts.count_users()
     total_evaluasi = Surveys.count_evaluasi()
-    avg_ratings = Surveys.average_ratings() || %{
-      kemudahan_pengajuan: 0.0,
-      kecepatan_respon: 0.0,
-      kecepatan_penanganan: 0.0,
-      kualitas_layanan: 0.0
-    }
+
+    avg_ratings =
+      Surveys.average_ratings() ||
+        %{
+          kemudahan_pengajuan: 0.0,
+          kecepatan_respon: 0.0,
+          kecepatan_penanganan: 0.0,
+          kualitas_layanan: 0.0
+        }
 
     recent_laporan =
       Pengaduan.list_laporan()
@@ -32,6 +36,7 @@ defmodule SipaduWeb.Admin.DashboardLive do
       |> assign(total_laporan: total_laporan)
       |> assign(menunggu: menunggu)
       |> assign(diproses: diproses)
+      |> assign(di_respon: di_respon)
       |> assign(selesai: selesai)
       |> assign(ditolak: ditolak)
       |> assign(total_users: total_users)
@@ -45,54 +50,86 @@ defmodule SipaduWeb.Admin.DashboardLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="space-y-8">
-      <!-- Welcome Header -->
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+    <div class="space-y-8 max-w-7xl mx-auto pb-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-8 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100">
         <div>
-          <h1 class="text-2xl font-bold text-slate-900">Halo, {@current_user.name}!</h1>
-          <p class="text-sm text-slate-500 mt-1">Selamat datang kembali di Portal Admin SIPADU UPA TIK.</p>
+          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+            Halo, {@current_user.name}! 👋
+          </h1>
+          <p class="text-base text-slate-500 mt-1.5">
+            Pantau dan kelola aktivitas laporan pengaduan UPA TIK hari ini.
+          </p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 w-fit">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <div class="flex items-center gap-2.5 text-sm font-bold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100 shadow-sm w-fit">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75">
+            </span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          </span>
           Sistem Online
         </div>
       </div>
 
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <.stat_card title="Total Pengaduan" value={@total_laporan} icon="hero-document-text" color="text-indigo-600 bg-indigo-50 border-indigo-100" />
-        <.stat_card title="Menunggu Tindakan" value={@menunggu} icon="hero-clock" color="text-amber-600 bg-amber-50 border-amber-100" />
-        <.stat_card title="Sedang Diproses" value={@diproses} icon="hero-arrow-path" color="text-blue-600 bg-blue-50 border-blue-100" />
-        <.stat_card title="Laporan Selesai" value={@selesai} icon="hero-check-circle" color="text-emerald-600 bg-emerald-50 border-emerald-100" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <.stat_card
+          title="Total Laporan"
+          value={@total_laporan}
+          icon="hero-document-text"
+          theme="indigo"
+        />
+        <.stat_card title="Menunggu" value={@menunggu} icon="hero-clock" theme="amber" />
+        <.stat_card title="Diproses" value={@diproses} icon="hero-arrow-path" theme="blue" />
+        <.stat_card
+          title="Di Respon"
+          value={@di_respon}
+          icon="hero-chat-bubble-left-right"
+          theme="violet"
+        />
+        <.stat_card title="Selesai" value={@selesai} icon="hero-check-circle" theme="emerald" />
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Recent Laporan -->
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-            <h2 class="text-lg font-bold text-slate-900">Pengaduan Terbaru</h2>
-            <.link navigate={~p"/admin/laporan"} class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">
-              Lihat semua Laporan &rarr;
+        <div class="lg:col-span-2 flex flex-col bg-white rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+          <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h2 class="text-xl font-extrabold text-slate-800">Pengaduan Terbaru</h2>
+            <.link
+              navigate={~p"/admin/laporan"}
+              class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1"
+            >
+              Lihat Semua <.icon name="hero-arrow-right" class="w-4 h-4" />
             </.link>
           </div>
-          <div class="divide-y divide-slate-150">
+          <div class="flex-1 divide-y divide-slate-100">
             <%= if @recent_laporan == [] do %>
-              <div class="p-6 text-center text-slate-400">Belum ada pengaduan masuk.</div>
+              <div class="p-12 text-center flex flex-col items-center justify-center">
+                <div class="bg-slate-50 p-4 rounded-full mb-4">
+                  <.icon name="hero-inbox" class="w-8 h-8 text-slate-400" />
+                </div>
+                <p class="text-slate-500 font-medium">Belum ada pengaduan masuk saat ini.</p>
+              </div>
             <% else %>
               <%= for lap <- @recent_laporan do %>
-                <div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
-                  <div class="space-y-1">
-                    <p class="font-semibold text-slate-900">{lap.judul_laporan}</p>
-                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
-                      <span>{lap.nama}</span>
+                <div class="p-6 px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 hover:bg-slate-50/80 transition-colors duration-200">
+                  <div class="space-y-1.5 flex-1">
+                    <p class="font-bold text-slate-800 text-lg line-clamp-1">{lap.judul_laporan}</p>
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500 font-medium">
+                      <div class="flex items-center gap-1.5">
+                        <.icon name="hero-user" class="w-4 h-4 text-slate-400" />
+                        {lap.nama}
+                      </div>
                       <span class="text-slate-300">&bull;</span>
-                      <span>{lap.kategori}</span>
+                      <div class="flex items-center gap-1.5 bg-slate-100 px-2.5 py-0.5 rounded-md text-slate-600 text-xs uppercase tracking-wider font-bold">
+                        {lap.kategori}
+                      </div>
                     </div>
                   </div>
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-4">
                     <.status_badge status={lap.status} />
-                    <.link navigate={~p"/admin/laporan/#{lap.id}"} class="btn btn-ghost btn-sm">
-                      Detail
+                    <.link
+                      navigate={~p"/admin/laporan/#{lap.id}"}
+                      class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                    >
+                      <.icon name="hero-chevron-right" class="w-5 h-5" />
                     </.link>
                   </div>
                 </div>
@@ -101,35 +138,48 @@ defmodule SipaduWeb.Admin.DashboardLive do
           </div>
         </div>
 
-        <!-- Surveys Ratings & System Info -->
-        <div class="space-y-8">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-            <h2 class="text-lg font-bold text-slate-900">Rata-rata Rating Evaluasi</h2>
-            <div class="space-y-4">
+        <div class="space-y-8 flex flex-col">
+          <div class="bg-white p-8 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 flex-1">
+            <div class="flex items-center gap-3 mb-8">
+              <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                <.icon name="hero-star" class="w-6 h-6" />
+              </div>
+              <h2 class="text-xl font-extrabold text-slate-800">Evaluasi Layanan</h2>
+            </div>
+
+            <div class="space-y-6">
               <.rating_progress label="Kemudahan Pengajuan" value={@avg_ratings.kemudahan_pengajuan} />
               <.rating_progress label="Kecepatan Respon" value={@avg_ratings.kecepatan_respon} />
-              <.rating_progress label="Kecepatan Penanganan" value={@avg_ratings.kecepatan_penanganan} />
+              <.rating_progress
+                label="Kecepatan Penanganan"
+                value={@avg_ratings.kecepatan_penanganan}
+              />
               <.rating_progress label="Kualitas Layanan" value={@avg_ratings.kualitas_layanan} />
             </div>
-            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
-              <span class="text-slate-500">Total Evaluasi Masuk:</span>
-              <span class="font-bold text-slate-900">{@total_evaluasi}</span>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-sm font-semibold text-slate-500">Total Evaluasi Masuk</span>
+              <span class="text-lg font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-lg">
+                {@total_evaluasi}
+              </span>
             </div>
           </div>
 
-          <div class="bg-indigo-900 text-indigo-100 p-6 rounded-2xl shadow-md space-y-4 relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 opacity-10">
-              <.icon name="hero-shield-check" class="w-40 h-40" />
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl shadow-lg relative overflow-hidden group">
+            <div class="absolute -right-8 -top-8 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-700">
+              <.icon name="hero-server-stack" class="w-48 h-48 text-white" />
             </div>
-            <h3 class="font-bold text-lg text-white">Statistik Sistem</h3>
-            <div class="grid grid-cols-2 gap-4 text-center">
-              <div class="bg-indigo-950/40 p-3 rounded-xl">
-                <span class="block text-2xl font-extrabold text-white">{@total_users}</span>
-                <span class="text-xs text-indigo-300">Total Pengguna</span>
-              </div>
-              <div class="bg-indigo-950/40 p-3 rounded-xl">
-                <span class="block text-2xl font-extrabold text-white">{@ditolak}</span>
-                <span class="text-xs text-indigo-300">Laporan Ditolak</span>
+            <div class="relative z-10">
+              <h3 class="font-bold text-xl text-white mb-6">Statistik Sistem</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                  <span class="block text-3xl font-black text-white mb-1">{@total_users}</span>
+                  <span class="text-sm font-medium text-slate-300">Pengguna Aktif</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                  <span class="block text-3xl font-black text-white mb-1">{@ditolak}</span>
+                  <span class="text-sm font-medium text-slate-300">Laporan Ditolak</span>
+                </div>
               </div>
             </div>
           </div>
@@ -141,13 +191,20 @@ defmodule SipaduWeb.Admin.DashboardLive do
 
   defp stat_card(assigns) do
     ~H"""
-    <div class={["bg-white p-6 rounded-2xl shadow-sm border flex items-center justify-between", @color]}>
-      <div class="space-y-1">
-        <span class="block text-sm font-semibold text-slate-500">{@title}</span>
-        <span class="block text-3xl font-extrabold text-slate-900">{@value}</span>
+    <div class="bg-white p-5 xl:p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      <div class={[
+        "p-3.5 rounded-2xl flex items-center justify-center shadow-inner w-fit",
+        @theme == "indigo" && "bg-indigo-50 text-indigo-600 border border-indigo-100",
+        @theme == "amber" && "bg-amber-50 text-amber-600 border border-amber-100",
+        @theme == "blue" && "bg-blue-50 text-blue-600 border border-blue-100",
+        @theme == "violet" && "bg-violet-50 text-violet-600 border border-violet-100",
+        @theme == "emerald" && "bg-emerald-50 text-emerald-600 border border-emerald-100"
+      ]}>
+        <.icon name={@icon} class="w-7 h-7" />
       </div>
-      <div class="p-3 rounded-xl bg-white/70 shadow-sm border border-slate-100/50">
-        <.icon name={@icon} class="w-6 h-6" />
+      <div class="space-y-0.5">
+        <span class="block text-3xl font-black text-slate-800">{@value}</span>
+        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider">{@title}</span>
       </div>
     </div>
     """
@@ -163,17 +220,24 @@ defmodule SipaduWeb.Admin.DashboardLive do
         _ -> 0.0
       end
 
-    percent = (val / 5.0) * 100
+    percent = val / 5.0 * 100
     assigns = assign(assigns, :val, val) |> assign(:percent, percent)
 
     ~H"""
-    <div class="space-y-1.5">
-      <div class="flex justify-between text-sm">
-        <span class="font-medium text-slate-650">{@label}</span>
-        <span class="font-bold text-slate-905">{@val} / 5.0</span>
+    <div class="space-y-2">
+      <div class="flex justify-between items-center text-sm">
+        <span class="font-bold text-slate-600">{@label}</span>
+        <div class="flex items-center gap-1.5">
+          <span class="font-black text-slate-800">{@val}</span>
+          <span class="text-slate-400 font-medium">/ 5.0</span>
+        </div>
       </div>
-      <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-        <div class="bg-indigo-600 h-full rounded-full transition-all duration-500" style={"width: #{@percent}%"}></div>
+      <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden shadow-inner">
+        <div
+          class="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-full transition-all duration-700 ease-out"
+          style={"width: #{@percent}%"}
+        >
+        </div>
       </div>
     </div>
     """
@@ -182,12 +246,22 @@ defmodule SipaduWeb.Admin.DashboardLive do
   defp status_badge(assigns) do
     ~H"""
     <span class={[
-      "px-2.5 py-1 rounded-full text-xs font-semibold tracking-wider",
-      @status == "Menunggu" && "text-amber-800 bg-amber-100 border border-amber-200",
-      @status == "Diproses" && "text-blue-800 bg-blue-100 border border-blue-200",
-      @status == "Selesai" && "text-emerald-800 bg-emerald-100 border border-emerald-200",
-      @status == "Ditolak" && "text-rose-800 bg-rose-100 border border-rose-200"
+      "px-3 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm flex items-center gap-1.5",
+      @status == "Menunggu" && "text-amber-700 bg-amber-50 border border-amber-200",
+      @status == "Diproses" && "text-blue-700 bg-blue-50 border border-blue-200",
+      @status == "Di Respon" && "text-violet-700 bg-violet-50 border border-violet-200",
+      @status == "Selesai" && "text-emerald-700 bg-emerald-50 border border-emerald-200",
+      @status == "Ditolak" && "text-rose-700 bg-rose-50 border border-rose-200"
     ]}>
+      <span class={[
+        "w-1.5 h-1.5 rounded-full",
+        @status == "Menunggu" && "bg-amber-500",
+        @status == "Diproses" && "bg-blue-500",
+        @status == "Di Respon" && "bg-violet-500",
+        @status == "Selesai" && "bg-emerald-500",
+        @status == "Ditolak" && "bg-rose-500"
+      ]}>
+      </span>
       {@status}
     </span>
     """
