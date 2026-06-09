@@ -40,6 +40,22 @@ defmodule SipaduWeb.Router do
     get "/laporan/lampiran/:filename", LaporanController, :show_file
   end
 
+  live_session :admin,
+    on_mount: [{SipaduWeb.UserAuth, :ensure_admin}],
+    layout: {SipaduWeb.Layouts, :admin} do
+
+    scope "/admin", SipaduWeb.Admin do
+      pipe_through [:browser]
+
+      live "/", DashboardLive
+      live "/laporan", LaporanLive.Index
+      live "/laporan/:id", LaporanLive.Show
+      live "/users", UserLive.Index
+      live "/kategori", KategoriLive.Index
+      live "/evaluasi", EvaluasiLive.Index
+    end
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", SipaduWeb do
   #   pipe_through :api

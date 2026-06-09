@@ -1,6 +1,6 @@
 defmodule Sipadu.Pengaduan do
   @moduledoc """
-  Context module for managing issue reports (Laporan).
+  Modul konteks untuk mengelola laporan pengaduan (Laporan).
   """
 
   import Ecto.Query, warn: false
@@ -8,7 +8,7 @@ defmodule Sipadu.Pengaduan do
   alias Sipadu.Pengaduan.Laporan
 
   @doc """
-  Returns the list of all laporan.
+  Mengembalikan daftar semua laporan pengaduan.
   """
   def list_laporan do
     Laporan
@@ -17,7 +17,7 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
-  Returns the list of laporan filtered by user_id.
+  Mengembalikan daftar laporan pengaduan yang difilter berdasarkan user_id.
   """
   def list_laporan_by_user(user_id) do
     Laporan
@@ -27,12 +27,12 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
-  Gets a single laporan.
+  Mengambil data satu laporan pengaduan berdasarkan ID.
   """
   def get_laporan!(id), do: Repo.get!(Laporan, id)
 
   @doc """
-  Creates a laporan.
+  Membuat laporan pengaduan baru.
   """
   def create_laporan(attrs \\ %{}) do
     %Laporan{}
@@ -41,7 +41,7 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
-  Updates a laporan.
+  Memperbarui data laporan pengaduan.
   """
   def update_laporan(%Laporan{} = laporan, attrs) do
     laporan
@@ -50,9 +50,93 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking laporan changes.
+  Mengembalikan `%Ecto.Changeset{}` untuk melacak perubahan laporan pengaduan.
   """
   def change_laporan(%Laporan{} = laporan, attrs \\ %{}) do
     Laporan.changeset(laporan, attrs)
+  end
+
+  # === Kategori Permasalahan ===
+  alias Sipadu.Pengaduan.KategoriPermasalahan
+
+  @doc """
+  Mengembalikan semua kategori permasalahan.
+  """
+  def list_kategori do
+    KategoriPermasalahan
+    |> order_by(asc: :nama)
+    |> Repo.all()
+  end
+
+  @doc """
+  Mengembalikan semua kategori permasalahan yang aktif.
+  """
+  def list_kategori_aktif do
+    KategoriPermasalahan
+    |> where(aktif: true)
+    |> order_by(asc: :nama)
+    |> Repo.all()
+  end
+
+  @doc """
+  Mengambil kategori permasalahan berdasarkan ID.
+  """
+  def get_kategori!(id), do: Repo.get!(KategoriPermasalahan, id)
+
+  @doc """
+  Membuat kategori permasalahan baru.
+  """
+  def create_kategori(attrs \\ %{}) do
+    %KategoriPermasalahan{}
+    |> KategoriPermasalahan.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Memperbarui kategori permasalahan.
+  """
+  def update_kategori(%KategoriPermasalahan{} = kategori, attrs) do
+    kategori
+    |> KategoriPermasalahan.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Menghapus kategori permasalahan.
+  """
+  def delete_kategori(%KategoriPermasalahan{} = kategori) do
+    Repo.delete(kategori)
+  end
+
+  @doc """
+  Mengembalikan `%Ecto.Changeset{}` untuk melacak perubahan kategori permasalahan.
+  """
+  def change_kategori(%KategoriPermasalahan{} = kategori, attrs \\ %{}) do
+    KategoriPermasalahan.changeset(kategori, attrs)
+  end
+
+  # === Statistik untuk Dashboard ===
+
+  @doc """
+  Menghitung jumlah total laporan.
+  """
+  def count_laporan, do: Repo.aggregate(Laporan, :count)
+
+  @doc """
+  Menghitung jumlah laporan berdasarkan status.
+  """
+  def count_laporan_by_status(status) do
+    Laporan
+    |> where(status: ^status)
+    |> Repo.aggregate(:count)
+  end
+
+  @doc """
+  Fungsi khusus admin untuk memperbarui laporan (misal mengubah status & tanggapan).
+  """
+  def admin_update_laporan(%Laporan{} = laporan, attrs) do
+    laporan
+    |> Laporan.changeset(attrs)
+    |> Repo.update()
   end
 end

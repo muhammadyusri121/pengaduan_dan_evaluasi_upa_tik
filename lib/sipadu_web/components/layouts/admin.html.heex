@@ -1,0 +1,84 @@
+<div class="min-h-screen bg-slate-50 flex flex-col md:flex-row">
+  <!-- Mobile Header -->
+  <header class="bg-indigo-900 text-white px-4 py-3 flex items-center justify-between md:hidden shadow-md">
+    <div class="flex items-center gap-3">
+      <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" alt="SIPADU Logo" />
+      <span class="font-bold text-lg tracking-wider">SIPADU ADMIN</span>
+    </div>
+    <button
+      type="button"
+      phx-click={JS.toggle(to: "#mobile-sidebar")}
+      class="text-slate-200 hover:text-white focus:outline-none"
+    >
+      <.icon name="hero-bars-3" class="w-6 h-6" />
+    </button>
+  </header>
+
+  <!-- Mobile Sidebar Overlay (Initially hidden) -->
+  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 flex md:hidden bg-slate-900/50 backdrop-blur-sm">
+    <div class="w-64 bg-slate-900 text-slate-300 flex flex-col h-full shadow-2xl relative">
+      <div class="px-6 py-5 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" />
+          <span class="font-bold text-lg text-white">SIPADU Admin</span>
+        </div>
+        <button phx-click={JS.toggle(to: "#mobile-sidebar")} class="text-slate-400 hover:text-white">
+          <.icon name="hero-x-mark" class="w-6 h-6" />
+        </button>
+      </div>
+
+      <!-- Navigation Links Mobile -->
+      <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+        <.admin_nav_links />
+      </nav>
+
+      <!-- Admin User Info Mobile -->
+      <div class="p-4 border-t border-slate-800 flex items-center gap-3">
+        <img src={@current_user.image} class="w-10 h-10 rounded-full border-2 border-indigo-500" />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-white truncate">{@current_user.name}</p>
+          <p class="text-xs text-slate-400 truncate">{@current_user.email}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-slate-900 text-slate-300 shadow-xl border-r border-slate-800">
+    <!-- Header -->
+    <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
+      <img src={~p"/images/logo.svg"} class="w-8 h-8 filter brightness-0 invert" alt="SIPADU Logo" />
+      <span class="font-bold text-lg tracking-wider text-white">SIPADU ADMIN</span>
+    </div>
+
+    <!-- Navigation Links Desktop -->
+    <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      <.admin_nav_links />
+    </nav>
+
+    <!-- Theme and User profile -->
+    <div class="p-4 border-t border-slate-800 space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-slate-400">TEMA</span>
+        <.theme_toggle />
+      </div>
+      
+      <div class="flex items-center gap-3 bg-slate-850 p-2 rounded-lg">
+        <img src={@current_user.image} class="w-10 h-10 rounded-full border border-indigo-500" />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-white truncate">{@current_user.name}</p>
+          <p class="text-xs text-slate-400 truncate">{@current_user.email}</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col md:pl-64">
+    <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+      {@inner_content}
+    </main>
+  </div>
+</div>
+
+<.flash_group flash={@flash} />

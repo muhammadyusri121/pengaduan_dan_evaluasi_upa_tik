@@ -1,6 +1,6 @@
 defmodule Sipadu.MinioClient do
   @moduledoc """
-  A simple client for interacting with MinIO using AWS Signature V4.
+  Klien sederhana untuk berinteraksi dengan MinIO menggunakan AWS Signature V4.
   """
   require Logger
 
@@ -36,7 +36,7 @@ defmodule Sipadu.MinioClient do
   end
 
   @doc """
-  Uploads a file to the configured MinIO bucket.
+  Mengunggah berkas ke bucket MinIO yang dikonfigurasi.
   """
   def upload_file(filename, file_binary, content_type) do
     cfg = config()
@@ -65,7 +65,7 @@ defmodule Sipadu.MinioClient do
   end
 
   @doc """
-  Retrieves a file from the configured MinIO bucket.
+  Mengambil berkas dari bucket MinIO yang dikonfigurasi.
   """
   def get_file(filename) do
     cfg = config()
@@ -91,7 +91,7 @@ defmodule Sipadu.MinioClient do
   end
 
   @doc """
-  Generates AWS Signature V4 headers for a request.
+  Menghasilkan header AWS Signature V4 untuk request.
   """
   def sign_request(method, url_str, body, content_type, access_key, secret_key) do
     uri = URI.parse(url_str)

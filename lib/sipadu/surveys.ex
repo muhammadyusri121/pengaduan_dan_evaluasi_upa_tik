@@ -67,4 +67,27 @@ defmodule Sipadu.Surveys do
   def change_evaluasi_layanan(%EvaluasiLayanan{} = evaluasi_layanan, attrs \\ %{}) do
     EvaluasiLayanan.changeset(evaluasi_layanan, attrs)
   end
+
+  @doc """
+  Menghitung jumlah total evaluasi layanan.
+  """
+  def count_evaluasi do
+    Repo.aggregate(EvaluasiLayanan, :count)
+  end
+
+  @doc """
+  Menghitung rata-rata rating dari setiap aspek evaluasi.
+  """
+  def average_ratings do
+    Repo.one(
+      from(e in EvaluasiLayanan,
+        select: %{
+          kemudahan_pengajuan: avg(e.kemudahan_pengajuan),
+          kecepatan_respon: avg(e.kecepatan_respon),
+          kecepatan_penanganan: avg(e.kecepatan_penanganan),
+          kualitas_layanan: avg(e.kualitas_layanan)
+        }
+      )
+    )
+  end
 end

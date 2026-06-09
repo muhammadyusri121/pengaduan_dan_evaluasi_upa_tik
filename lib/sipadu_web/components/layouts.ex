@@ -151,4 +151,39 @@ defmodule SipaduWeb.Layouts do
     </div>
     """
   end
+
+  @doc """
+  Komponen untuk link navigasi di sidebar admin.
+  """
+  def admin_nav_links(assigns) do
+    ~H"""
+    <div class="space-y-1">
+      <.admin_link navigate={~p"/admin"} icon="hero-chart-bar-square" label="Dashboard" />
+      <.admin_link navigate={~p"/admin/laporan"} icon="hero-document-text" label="Laporan Pengaduan" />
+      <.admin_link navigate={~p"/admin/users"} icon="hero-users" label="Manajemen User" />
+      <.admin_link navigate={~p"/admin/kategori"} icon="hero-tag" label="Kategori Laporan" />
+      <.admin_link navigate={~p"/admin/evaluasi"} icon="hero-chart-pie" label="Rekap Evaluasi" />
+      
+      <div class="pt-4 border-t border-slate-800 mt-4">
+        <.admin_link navigate={~p"/"} icon="hero-arrow-left" label="Kembali ke Portal" />
+        <.admin_link navigate={~p"/auth/signout"} icon="hero-arrow-left-on-rectangle" label="Keluar" />
+      </div>
+    </div>
+    """
+  end
+
+  attr :navigate, :string, required: true
+  attr :icon, :string, required: true
+  attr :label, :string, required: true
+  def admin_link(assigns) do
+    ~H"""
+    <.link
+      navigate={@navigate}
+      class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-800 hover:text-white text-slate-400"
+    >
+      <.icon name={@icon} class="w-5 h-5 text-indigo-400 group-hover:text-white" />
+      {@label}
+    </.link>
+    """
+  end
 end
