@@ -31,11 +31,16 @@ defmodule SipaduWeb.Admin.EvaluasiLive.Index do
   def render(assigns) do
     ~H"""
     <div class="max-w-7xl mx-auto pb-12 space-y-8">
-      <div class="mb-8">
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Rekap Evaluasi Layanan</h1>
-        <p class="text-base text-slate-500 mt-1.5">
-          Pantau tingkat kepuasan dan kualitas pelayanan UPA TIK secara berkala.
-        </p>
+      <div class="relative overflow-hidden flex flex-col justify-center bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-3xl shadow-lg border border-blue-500 mb-8">
+        <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+          <.icon name="hero-star" class="w-64 h-64 text-white" />
+        </div>
+        <div class="relative z-10">
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Rekap Evaluasi Layanan</h1>
+          <p class="text-base text-blue-100 mt-1.5 font-medium">
+            Pantau tingkat kepuasan dan kualitas pelayanan UPA TIK secara berkala.
+          </p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -189,9 +194,10 @@ defmodule SipaduWeb.Admin.EvaluasiLive.Index do
     assigns = assign(assigns, :val, val)
 
     ~H"""
-    <div class="bg-white p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex items-start justify-between hover:-translate-y-1 transition-transform duration-300">
-      <div class="space-y-3">
-        <span class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">
+    <div class="bg-white p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex items-start justify-between hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group cursor-default relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div class="space-y-3 relative z-10">
+        <span class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-blue-600 transition-colors">
           {@label}
         </span>
 
@@ -204,7 +210,7 @@ defmodule SipaduWeb.Admin.EvaluasiLive.Index do
       </div>
 
       <div class={[
-        "p-3.5 rounded-2xl flex items-center justify-center shadow-inner",
+        "p-3.5 rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative z-10",
         @theme == "indigo" && "bg-indigo-50 text-indigo-600 border border-indigo-100",
         @theme == "amber" && "bg-amber-50 text-amber-600 border border-amber-100",
         @theme == "blue" && "bg-blue-50 text-blue-600 border border-blue-100",

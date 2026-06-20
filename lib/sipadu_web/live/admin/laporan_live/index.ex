@@ -42,15 +42,27 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
     ~H"""
     <div class="max-w-7xl mx-auto pb-12">
       <!-- Header & Filters -->
-      <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-8">
-        <div>
-          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Daftar Pengaduan</h1>
-          <p class="text-base text-slate-500 mt-1.5">
+      <div class="relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-3xl shadow-lg border border-blue-500 mb-8">
+        <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+          <.icon name="hero-document-magnifying-glass" class="w-64 h-64 text-white" />
+        </div>
+        <div class="relative z-10">
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Daftar Pengaduan</h1>
+          <p class="text-base text-blue-100 mt-1.5 font-medium">
             Kelola, pantau, dan tanggapi semua laporan yang masuk ke sistem.
           </p>
         </div>
         
-    <!-- Filter Tabs / Segmented Control -->
+        <div class="relative z-10 hidden xl:block">
+           <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex items-center gap-3">
+             <.icon name="hero-information-circle" class="w-6 h-6 text-blue-200" />
+             <p class="text-sm text-blue-50">Klik pada baris mana saja untuk melihat detail laporan.</p>
+           </div>
+        </div>
+      </div>
+      
+      <!-- Filter Tabs / Segmented Control -->
+      <div class="mb-8">
         <div class="inline-flex bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 overflow-x-auto max-w-full hide-scrollbar">
           <%= for status <- ["Semua", "Menunggu", "Diproses", "Di Respon", "Selesai", "Ditolak"] do %>
             <button
@@ -77,7 +89,7 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
             <thead>
               <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] font-extrabold text-slate-500 uppercase tracking-widest">
                 <th class="px-8 py-5">Tanggal Masuk</th>
-                <th class="px-8 py-5">Pelapor</th>
+                <th class="px-8 py-5">Info Pelapor</th>
                 <th class="px-8 py-5">Kategori & Judul</th>
                 <th class="px-8 py-5 text-center">Status</th>
                 <th class="px-8 py-5 text-right">Aksi</th>
@@ -103,56 +115,55 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
               <tr
                 :for={{id, lap} <- @streams.laporan_list}
                 id={id}
-                class="hover:bg-slate-50/80 transition-colors group"
+                phx-click={JS.navigate(~p"/admin/laporan/#{lap.id}")}
+                class="hover:bg-blue-50/50 transition-colors duration-200 group cursor-pointer relative"
               >
-                <!-- Tanggal -->
-                <td class="px-8 py-5 whitespace-nowrap">
-                  <div class="text-sm font-bold text-slate-700">
-                    {Calendar.strftime(lap.inserted_at, "%d %b %Y")}
-                  </div>
-                  <div class="text-xs font-medium text-slate-400 mt-0.5">
-                    {Calendar.strftime(lap.inserted_at, "%H:%M")} WIB
-                  </div>
-                </td>
-                
-    <!-- Pelapor -->
-                <td class="px-8 py-5 whitespace-nowrap">
+                <td class="px-8 py-6 whitespace-nowrap">
                   <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
-                      <.icon name="hero-user" class="w-4 h-4" />
+                    <div class="p-2.5 rounded-xl bg-blue-50 text-blue-600 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                      <.icon name="hero-calendar" class="w-5 h-5" />
                     </div>
                     <div>
-                      <div class="text-sm font-bold text-slate-800">{lap.nama}</div>
-                      <div class="text-xs font-medium text-slate-400 mt-0.5">{lap.nim_nip}</div>
+                      <div class="text-sm font-extrabold text-slate-900 mb-0.5 group-hover:text-blue-700 transition-colors">
+                        {Calendar.strftime(lap.inserted_at, "%d %b %Y")}
+                      </div>
+                      <div class="text-xs font-bold text-slate-500">
+                        {Calendar.strftime(lap.inserted_at, "%H:%M")} WIB
+                      </div>
                     </div>
                   </div>
                 </td>
-                
-    <!-- Kategori & Judul -->
-                <td class="px-8 py-5">
-                  <div class="flex flex-col gap-2">
-                    <div class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold w-fit">
-                      {lap.kategori}
-                    </div>
-                    <div class="text-sm font-bold text-slate-800 line-clamp-1">
-                      {lap.judul_laporan}
-                    </div>
+                <td class="px-8 py-6 whitespace-nowrap">
+                  <div class="text-sm font-extrabold text-slate-900 mb-0.5">{lap.nama}</div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                    {lap.nim_nip}
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md truncate max-w-[120px]">
+                      <.icon name="hero-building-office" class="w-3 h-3" />
+                      {lap.fakultas_unit_kerja || "-"}
+                    </span>
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md truncate max-w-[120px]">
+                      <.icon name="hero-device-phone-mobile" class="w-3 h-3" />
+                      {lap.no_hp || "-"}
+                    </span>
                   </div>
                 </td>
-                
-    <!-- Status -->
-                <td class="px-8 py-5 whitespace-nowrap text-center">
+                <td class="px-8 py-6">
+                  <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md mb-2 border border-slate-200/60 shadow-sm group-hover:bg-white group-hover:border-slate-300 transition-colors">
+                    {lap.kategori}
+                  </span>
+                  <p class="text-[15px] font-bold text-slate-800 leading-snug line-clamp-2 max-w-sm group-hover:text-blue-700 transition-colors">
+                    {lap.judul_laporan}
+                  </p>
+                </td>
+                <td class="px-8 py-6 whitespace-nowrap text-center">
                   <.status_badge status={lap.status} />
                 </td>
-                
-    <!-- Aksi -->
-                <td class="px-8 py-5 whitespace-nowrap text-right">
-                  <.link
-                    navigate={~p"/admin/laporan/#{lap.id}"}
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm"
-                  >
-                    Tindak Lanjuti <.icon name="hero-arrow-right" class="w-4 h-4" />
-                  </.link>
+                <td class="px-8 py-6 whitespace-nowrap text-right">
+                  <div class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100/50 rounded-xl transition-all inline-flex items-center justify-center">
+                    <.icon name="hero-arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </td>
               </tr>
             </tbody>

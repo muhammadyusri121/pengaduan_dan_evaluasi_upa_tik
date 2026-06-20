@@ -132,6 +132,62 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
+  Menghitung jumlah laporan yang dikelompokkan berdasarkan status dalam 1 query.
+  """
+  def get_laporan_status_counts do
+    Laporan
+    |> group_by([l], l.status)
+    |> select([l], {l.status, count(l.id)})
+    |> Repo.all()
+    |> Enum.into(%{})
+  end
+
+  @doc """
+  Mengambil daftar laporan yang sering dilaporkan (berdasarkan judul) dan sudah selesai untuk dijadikan FAQ.
+  """
+  def get_popular_faq(limit \\ 5) do
+    Laporan
+    |> where(status: "Selesai")
+    |> where([l], not is_nil(l.tanggapan_admin) and l.tanggapan_admin != "")
+    |> group_by([l], l.judul_laporan)
+    |> select([l], %{
+      id: min(l.id),
+      q: l.judul_laporan,
+      a: max(l.tanggapan_admin),
+      count: count(l.id)
+    })
+    |> order_by([l], desc: count(l.id), desc: min(l.id))
+    |> limit(^limit)
+    |> Repo.all()
+  end
+
+  @doc """
+  Mengembalikan daftar laporan yang sudah diselesaikan berdasarkan kategori (untuk halaman knowledge base / topik bantuan).
+  """
+  def list_resolved_laporan_by_kategori(kategori) do
+    Laporan
+    |> where(status: "Selesai")
+    |> where(kategori: ^kategori)
+    |> where([l], not is_nil(l.tanggapan_admin) and l.tanggapan_admin != "")
+    |> order_by(desc: :updated_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Mencari laporan yang sudah diselesaikan berdasarkan kata kunci pada judul, deskripsi, atau tanggapan.
+  """
+  def search_resolved_laporan(query) do
+    search_term = "%#{query}%"
+    
+    Laporan
+    |> where(status: "Selesai")
+    |> where([l], not is_nil(l.tanggapan_admin) and l.tanggapan_admin != "")
+    |> where([l], ilike(l.judul_laporan, ^search_term) or ilike(l.tanggapan_admin, ^search_term) or ilike(l.deskripsi, ^search_term))
+    |> order_by(desc: :updated_at)
+    |> Repo.all()
+  end
+
+  @doc """
   Fungsi khusus admin untuk memperbarui laporan (misal mengubah status & tanggapan).
   """
   def admin_update_laporan(%Laporan{} = laporan, attrs) do

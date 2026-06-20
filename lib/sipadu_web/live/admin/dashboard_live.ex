@@ -7,12 +7,14 @@ defmodule SipaduWeb.Admin.DashboardLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    total_laporan = Pengaduan.count_laporan()
-    menunggu = Pengaduan.count_laporan_by_status("Menunggu")
-    diproses = Pengaduan.count_laporan_by_status("Diproses")
-    di_respon = Pengaduan.count_laporan_by_status("Di Respon")
-    selesai = Pengaduan.count_laporan_by_status("Selesai")
-    ditolak = Pengaduan.count_laporan_by_status("Ditolak")
+    status_counts = Pengaduan.get_laporan_status_counts()
+
+    total_laporan = Enum.reduce(status_counts, 0, fn {_, count}, acc -> acc + count end)
+    menunggu = Map.get(status_counts, "Menunggu", 0)
+    diproses = Map.get(status_counts, "Diproses", 0)
+    di_respon = Map.get(status_counts, "Di Respon", 0)
+    selesai = Map.get(status_counts, "Selesai", 0)
+    ditolak = Map.get(status_counts, "Ditolak", 0)
 
     total_users = Accounts.count_users()
     total_evaluasi = Surveys.count_evaluasi()
@@ -51,22 +53,17 @@ defmodule SipaduWeb.Admin.DashboardLive do
   def render(assigns) do
     ~H"""
     <div class="space-y-8 max-w-7xl mx-auto pb-12">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-8 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100">
-        <div>
-          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+      <div class="relative overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-3xl shadow-lg border border-blue-500">
+        <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+          <.icon name="hero-sparkles" class="w-64 h-64 text-white" />
+        </div>
+        <div class="relative z-10">
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">
             Halo, {@current_user.name}! 👋
           </h1>
-          <p class="text-base text-slate-500 mt-1.5">
+          <p class="text-base text-blue-100 mt-1.5 font-medium">
             Pantau dan kelola aktivitas laporan pengaduan UPA TIK hari ini.
           </p>
-        </div>
-        <div class="flex items-center gap-2.5 text-sm font-bold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100 shadow-sm w-fit">
-          <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75">
-            </span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-          </span>
-          Sistem Online
         </div>
       </div>
 
@@ -109,9 +106,9 @@ defmodule SipaduWeb.Admin.DashboardLive do
               </div>
             <% else %>
               <%= for lap <- @recent_laporan do %>
-                <div class="p-6 px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 hover:bg-slate-50/80 transition-colors duration-200">
+                <.link navigate={~p"/admin/laporan/#{lap.id}"} class="p-6 px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 hover:bg-blue-50/50 transition-colors duration-200 group block">
                   <div class="space-y-1.5 flex-1">
-                    <p class="font-bold text-slate-800 text-lg line-clamp-1">{lap.judul_laporan}</p>
+                    <p class="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-blue-700 transition-colors">{lap.judul_laporan}</p>
                     <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500 font-medium">
                       <div class="flex items-center gap-1.5">
                         <.icon name="hero-user" class="w-4 h-4 text-slate-400" />
@@ -125,14 +122,11 @@ defmodule SipaduWeb.Admin.DashboardLive do
                   </div>
                   <div class="flex items-center gap-4">
                     <.status_badge status={lap.status} />
-                    <.link
-                      navigate={~p"/admin/laporan/#{lap.id}"}
-                      class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
-                    >
-                      <.icon name="hero-chevron-right" class="w-5 h-5" />
-                    </.link>
+                    <div class="p-2 text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-100/50 rounded-xl transition-all">
+                      <.icon name="hero-arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
-                </div>
+                </.link>
               <% end %>
             <% end %>
           </div>
@@ -165,19 +159,21 @@ defmodule SipaduWeb.Admin.DashboardLive do
             </div>
           </div>
 
-          <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl shadow-lg relative overflow-hidden group">
-            <div class="absolute -right-8 -top-8 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-700">
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl shadow-[0_10px_40px_rgb(0,0,0,0.15)] border border-slate-700/50 relative overflow-hidden group">
+            <div class="absolute -right-8 -top-8 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-700 pointer-events-none">
               <.icon name="hero-server-stack" class="w-48 h-48 text-white" />
             </div>
             <div class="relative z-10">
-              <h3 class="font-bold text-xl text-white mb-6">Statistik Sistem</h3>
+              <h3 class="font-bold text-xl text-white mb-6 flex items-center gap-2">
+                <.icon name="hero-cpu-chip" class="w-6 h-6 text-indigo-400" /> Statistik Sistem
+              </h3>
               <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                  <span class="block text-3xl font-black text-white mb-1">{@total_users}</span>
+                <div class="bg-white/5 hover:bg-white/10 backdrop-blur-xl p-5 rounded-2xl border border-white/10 transition-colors">
+                  <span class="block text-4xl font-black text-white mb-1">{@total_users}</span>
                   <span class="text-sm font-medium text-slate-300">Pengguna Aktif</span>
                 </div>
-                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                  <span class="block text-3xl font-black text-white mb-1">{@ditolak}</span>
+                <div class="bg-white/5 hover:bg-white/10 backdrop-blur-xl p-5 rounded-2xl border border-white/10 transition-colors">
+                  <span class="block text-4xl font-black text-rose-400 mb-1">{@ditolak}</span>
                   <span class="text-sm font-medium text-slate-300">Laporan Ditolak</span>
                 </div>
               </div>
@@ -191,9 +187,10 @@ defmodule SipaduWeb.Admin.DashboardLive do
 
   defp stat_card(assigns) do
     ~H"""
-    <div class="bg-white p-5 xl:p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <div class="bg-white p-5 xl:p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5 group cursor-pointer relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div class={[
-        "p-3.5 rounded-2xl flex items-center justify-center shadow-inner w-fit",
+        "p-3.5 rounded-2xl flex items-center justify-center shadow-inner w-fit group-hover:scale-110 transition-transform duration-300",
         @theme == "indigo" && "bg-indigo-50 text-indigo-600 border border-indigo-100",
         @theme == "amber" && "bg-amber-50 text-amber-600 border border-amber-100",
         @theme == "blue" && "bg-blue-50 text-blue-600 border border-blue-100",
@@ -204,7 +201,7 @@ defmodule SipaduWeb.Admin.DashboardLive do
       </div>
       <div class="space-y-0.5">
         <span class="block text-3xl font-black text-slate-800">{@value}</span>
-        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider">{@title}</span>
+        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-blue-600 transition-colors">{@title}</span>
       </div>
     </div>
     """
@@ -234,7 +231,7 @@ defmodule SipaduWeb.Admin.DashboardLive do
       </div>
       <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden shadow-inner">
         <div
-          class="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-full transition-all duration-700 ease-out"
+          class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-700 ease-out"
           style={"width: #{@percent}%"}
         >
         </div>

@@ -173,15 +173,20 @@ defmodule SipaduWeb.Admin.KategoriLive.Index do
   def render(assigns) do
     ~H"""
     <div class="max-w-7xl mx-auto pb-12 space-y-8 relative">
-      <div class="mb-8">
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kategori Permasalahan</h1>
-        <p class="text-base text-slate-500 mt-1.5">
-          Kelola jenis kategori permasalahan yang dapat dipilih oleh pengguna saat membuat laporan.
-        </p>
+      <div class="relative overflow-hidden flex flex-col justify-center bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-3xl shadow-lg border border-blue-500 mb-8">
+        <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+          <.icon name="hero-rectangle-group" class="w-64 h-64 text-white" />
+        </div>
+        <div class="relative z-10">
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Kategori Permasalahan</h1>
+          <p class="text-base text-blue-100 mt-1.5 font-medium">
+            Kelola jenis kategori permasalahan yang dapat dipilih oleh pengguna saat membuat laporan.
+          </p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-        <div class="xl:col-span-1 bg-white p-7 rounded-[2rem] shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 sticky top-24">
+        <div class="xl:col-span-1 bg-white p-7 rounded-[2rem] shadow-[0_10px_40px_rgb(0,0,0,0.08)] border border-slate-100 sticky top-24">
           <div class="flex items-center gap-3 mb-6">
             <div class={[
               "p-2 rounded-xl text-white shadow-md",
@@ -205,48 +210,60 @@ defmodule SipaduWeb.Admin.KategoriLive.Index do
             class="space-y-5"
           >
             <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-extrabold text-slate-500 uppercase tracking-widest ml-1">
+              <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest ml-1 group-focus-within:text-blue-600 transition-colors">
                 Nama Kategori
               </label>
-              <input
-                type="text"
-                name={@form[:nama].name}
-                value={@form[:nama].value}
-                placeholder="Contoh: Layanan Jaringan"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
-              />
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                  <.icon name="hero-tag" class="w-5 h-5" />
+                </div>
+                <input
+                  type="text"
+                  name={@form[:nama].name}
+                  value={@form[:nama].value}
+                  placeholder="Contoh: Layanan Jaringan"
+                  class="w-full pl-11 pr-4 py-3 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                />
+              </div>
               <%= if @form[:nama].errors != [] do %>
-                <span class="text-xs font-bold text-rose-500 ml-1">Nama wajib diisi.</span>
+                <span class="text-[11px] font-bold text-rose-500 ml-1 flex items-center gap-1">
+                  <.icon name="hero-exclamation-circle" class="w-3.5 h-3.5" /> Nama wajib diisi.
+                </span>
               <% end %>
             </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-extrabold text-slate-500 uppercase tracking-widest ml-1">
+            <div class="flex flex-col gap-1.5 mt-2">
+              <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest ml-1 group-focus-within:text-blue-600 transition-colors">
                 Deskripsi
               </label>
-              <textarea
-                name={@form[:deskripsi].name}
-                rows="4"
-                placeholder="Deskripsi singkat jenis permasalahan..."
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none"
-              ><%= @form[:deskripsi].value %></textarea>
+              <div class="relative group">
+                <textarea
+                  name={@form[:deskripsi].name}
+                  rows="4"
+                  placeholder="Penjelasan detail mengenai cakupan kategori permasalahan ini..."
+                  class="w-full px-4 py-3 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none resize-none leading-relaxed"
+                ><%= @form[:deskripsi].value %></textarea>
+              </div>
             </div>
 
-            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <input type="hidden" name={@form[:aktif].name} value="false" />
-              <input
-                type="checkbox"
-                id="aktif-checkbox"
-                name={@form[:aktif].name}
-                value="true"
-                checked={@form[:aktif].value}
-                class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                for="aktif-checkbox"
-                class="text-sm font-bold text-slate-700 cursor-pointer select-none"
-              >
-                Status Kategori Aktif
+            <div class="mt-2">
+              <label class="flex items-center gap-3 p-4 bg-slate-50/80 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer transition-colors group">
+                <input type="hidden" name={@form[:aktif].name} value="false" />
+                <div class="relative flex items-center justify-center">
+                  <input
+                    type="checkbox"
+                    id="aktif-checkbox"
+                    name={@form[:aktif].name}
+                    value="true"
+                    checked={@form[:aktif].value}
+                    class="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded focus:ring-0 checked:bg-blue-600 checked:border-blue-600 transition-all cursor-pointer"
+                  />
+                  <.icon name="hero-check" class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-slate-800 group-hover:text-blue-700 transition-colors">Status Kategori Aktif</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Centang agar kategori ini dapat dipilih pelapor.</span>
+                </div>
               </label>
             </div>
 
@@ -290,10 +307,10 @@ defmodule SipaduWeb.Admin.KategoriLive.Index do
                 <tr
                   :for={{id, kat} <- @streams.kategori_list}
                   id={id}
-                  class="hover:bg-slate-50/80 transition-colors group"
+                  class="hover:bg-blue-50/50 transition-colors duration-200 group"
                 >
                   <td class="px-8 py-5">
-                    <span class="block text-sm font-extrabold text-slate-800 mb-0.5">{kat.nama}</span>
+                    <span class="block text-sm font-extrabold text-slate-800 mb-0.5 group-hover:text-blue-700 transition-colors">{kat.nama}</span>
                     <span class="block text-xs font-medium text-slate-500 truncate max-w-xs md:max-w-md">
                       {kat.deskripsi || "Tidak ada deskripsi."}
                     </span>
