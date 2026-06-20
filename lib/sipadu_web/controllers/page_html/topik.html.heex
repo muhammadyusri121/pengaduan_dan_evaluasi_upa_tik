@@ -1,0 +1,64 @@
+<div class="min-h-screen bg-slate-50 relative pb-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
+    <div class="mb-8">
+      <.link navigate={~p"/"} class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-medium transition-colors">
+        <.icon name="hero-arrow-left" class="w-4 h-4" /> Kembali ke Beranda
+      </.link>
+    </div>
+
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center p-3 bg-blue-100 text-blue-600 rounded-2xl mb-4">
+        <.icon name="hero-book-open" class="w-8 h-8" />
+      </div>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+        Topik: <span class="text-blue-600"><%= @kategori_nama %></span>
+      </h1>
+      <p class="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+        Berikut adalah kumpulan pertanyaan dan solusi yang pernah dilaporkan terkait <%= String.downcase(@kategori_nama) %>.
+      </p>
+    </div>
+
+    <%= if @faq == [] do %>
+      <div class="bg-white rounded-3xl p-10 text-center shadow-sm border border-slate-100 flex flex-col items-center mb-12">
+        <div class="bg-slate-50 p-5 rounded-full mb-5">
+          <.icon name="hero-inbox" class="w-10 h-10 text-slate-400" />
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">Belum ada topik terselesaikan</h3>
+        <p class="text-slate-500 mb-6">Saat ini belum ada riwayat pertanyaan atau laporan yang masuk dan diselesaikan untuk kategori ini.</p>
+      </div>
+    <% else %>
+      <div class="flex flex-col gap-3 md:gap-4 mb-12">
+        <%= for item <- @faq do %>
+          <details class="group bg-white border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between font-semibold text-slate-800 py-4 md:py-5 px-5 md:px-6 cursor-pointer select-none group-hover:text-blue-600 transition-colors text-sm md:text-[15px]">
+              <span class="pr-4"><%= item.judul_laporan %></span>
+              <span class="flex-shrink-0 transition-transform duration-300 group-open:rotate-180 bg-slate-50 p-1.5 md:p-2 rounded-full group-hover:bg-blue-50">
+                <.icon name="hero-chevron-down" class="h-4 w-4 md:h-5 md:w-5 text-slate-400 group-hover:text-blue-600" />
+              </span>
+            </summary>
+            <div class="px-5 md:px-6 pb-5 md:pb-6 pt-1 md:pt-2 border-t border-slate-50 bg-slate-50/30">
+              <div class="flex items-center gap-2 mb-2">
+                <.icon name="hero-check-badge" class="w-4 h-4 text-emerald-500" />
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Solusi / Jawaban</span>
+              </div>
+              <p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line ml-6">
+                <%= item.tanggapan_admin %>
+              </p>
+            </div>
+          </details>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2rem] p-8 md:p-10 text-center shadow-lg relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+      <div class="relative z-10">
+        <h3 class="text-2xl font-bold text-white mb-3">Tidak menemukan jawaban?</h3>
+        <p class="text-blue-100 text-sm md:text-base mb-8 max-w-xl mx-auto">Jika masalah Anda tidak ada di daftar atau masih belum terselesaikan, segera buat laporan agar teknisi kami dapat membantu Anda.</p>
+        <.link navigate={~p"/laporan/baru"} class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-3.5 rounded-full shadow-[0_8px_30px_rgb(255,255,255,0.2)] hover:shadow-[0_8px_30px_rgb(255,255,255,0.35)] hover:-translate-y-1 active:scale-95 transition-all duration-300">
+          <.icon name="hero-paper-airplane" class="w-5 h-5" /> Buat Laporan Baru
+        </.link>
+      </div>
+    </div>
+  </div>
+</div>

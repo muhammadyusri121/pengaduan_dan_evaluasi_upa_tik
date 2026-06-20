@@ -44,7 +44,10 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       <%= for cat <- @kategori do %>
-        <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(37,99,235,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex items-start gap-4 md:gap-5 cursor-pointer group">
+        <.link
+          navigate={~p"/topik/#{cat.nama}"}
+          class="block bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(37,99,235,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex items-start gap-4 md:gap-5 cursor-pointer group"
+        >
           <div class="bg-blue-50/80 p-3 md:p-3.5 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-md group-hover:shadow-blue-500/30 transition-all duration-300 shrink-0">
             <.icon
               name={cat.icon}
@@ -57,7 +60,7 @@
             </h3>
             <p class="text-xs md:text-sm text-slate-500 leading-relaxed">{cat.desc}</p>
           </div>
-        </div>
+        </.link>
       <% end %>
     </div>
   </div>
