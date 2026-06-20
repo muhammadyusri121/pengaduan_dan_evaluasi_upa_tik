@@ -77,7 +77,7 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
             <thead>
               <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] font-extrabold text-slate-500 uppercase tracking-widest">
                 <th class="px-8 py-5">Tanggal Masuk</th>
-                <th class="px-8 py-5">Pelapor</th>
+                <th class="px-8 py-5">Info Pelapor</th>
                 <th class="px-8 py-5">Kategori & Judul</th>
                 <th class="px-8 py-5 text-center">Status</th>
                 <th class="px-8 py-5 text-right">Aksi</th>
@@ -115,15 +115,23 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
                   </div>
                 </td>
                 
-    <!-- Pelapor -->
                 <td class="px-8 py-5 whitespace-nowrap">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 mt-1 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors shrink-0">
                       <.icon name="hero-user" class="w-4 h-4" />
                     </div>
-                    <div>
+                    <div class="flex flex-col gap-1">
                       <div class="text-sm font-bold text-slate-800">{lap.nama}</div>
-                      <div class="text-xs font-medium text-slate-400 mt-0.5">{lap.nim_nip}</div>
+                      <div class="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                        <.icon name="hero-identification" class="w-3.5 h-3.5 text-slate-400" /> {lap.nim_nip}
+                      </div>
+                      <div class="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                        <.icon name="hero-phone" class="w-3.5 h-3.5 text-emerald-500" /> 
+                        <span class="text-emerald-600 font-semibold">{lap.no_hp || "-"}</span>
+                      </div>
+                      <div class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded w-fit mt-0.5 border border-indigo-100/50">
+                        {lap.fakultas_unit_kerja}
+                      </div>
                     </div>
                   </div>
                 </td>

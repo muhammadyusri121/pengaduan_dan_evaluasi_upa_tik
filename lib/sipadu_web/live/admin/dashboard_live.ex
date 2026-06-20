@@ -7,12 +7,14 @@ defmodule SipaduWeb.Admin.DashboardLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    total_laporan = Pengaduan.count_laporan()
-    menunggu = Pengaduan.count_laporan_by_status("Menunggu")
-    diproses = Pengaduan.count_laporan_by_status("Diproses")
-    di_respon = Pengaduan.count_laporan_by_status("Di Respon")
-    selesai = Pengaduan.count_laporan_by_status("Selesai")
-    ditolak = Pengaduan.count_laporan_by_status("Ditolak")
+    status_counts = Pengaduan.get_laporan_status_counts()
+
+    total_laporan = Enum.reduce(status_counts, 0, fn {_, count}, acc -> acc + count end)
+    menunggu = Map.get(status_counts, "Menunggu", 0)
+    diproses = Map.get(status_counts, "Diproses", 0)
+    di_respon = Map.get(status_counts, "Di Respon", 0)
+    selesai = Map.get(status_counts, "Selesai", 0)
+    ditolak = Map.get(status_counts, "Ditolak", 0)
 
     total_users = Accounts.count_users()
     total_evaluasi = Surveys.count_evaluasi()

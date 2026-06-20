@@ -28,6 +28,25 @@
         </p>
       </div>
 
+      <div class="bg-blue-50/80 border border-blue-100 rounded-2xl p-5 md:p-6 mb-8 relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-[0.05]">
+          <.icon name="hero-light-bulb" class="w-32 h-32 text-blue-800" />
+        </div>
+        <div class="relative z-10 flex flex-col md:flex-row gap-4 items-start">
+          <div class="bg-white p-2.5 rounded-xl shadow-sm text-blue-600 shrink-0">
+            <.icon name="hero-light-bulb" class="w-6 h-6" />
+          </div>
+          <div>
+            <h3 class="text-blue-900 font-extrabold mb-1.5 text-base">Tips Pelaporan Cepat Ditangani!</h3>
+            <ul class="text-sm text-blue-800/80 space-y-1 list-disc list-inside">
+              <li>Sertakan <strong class="text-blue-900">Nama Gedung & Nomor Ruangan</strong> yang spesifik pada kolom Lokasi.</li>
+              <li>Jelaskan kronologi kendala sedetail mungkin agar teknisi paham konteksnya.</li>
+              <li>Sangat disarankan untuk <strong class="text-blue-900">melampirkan foto/screenshot error</strong> terkait masalah sistem/jaringan.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <.form for={@form} action={~p"/laporan"} method="post" multipart={true} class="space-y-10">
         <div>
           <div class="relative flex items-center py-4 mb-4">
@@ -82,7 +101,7 @@
                 name={@form[:fakultas_unit_kerja].name}
                 value={@form[:fakultas_unit_kerja].value}
                 required
-                placeholder="Contoh: Fakultas Teknik"
+                placeholder="Contoh: Fakultas Teknik / Fasilkom / BAK"
                 class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-800 transition-all text-sm placeholder:text-slate-400"
               />
             </div>
@@ -184,9 +203,9 @@
                 border border-slate-200 rounded-2xl p-1.5 bg-white shadow-sm focus:ring-2 focus:ring-blue-500/20 transition-all"
             />
 
-            <p class="mt-1 text-xs text-slate-500 flex items-center gap-1.5 ml-1">
-              <.icon name="hero-information-circle" class="w-4 h-4 text-blue-500" />
-              Maksimal 5MB (Bisa berupa screenshot error atau foto fisik).
+            <p class="mt-2 text-xs text-slate-500 flex items-start gap-1.5 ml-1">
+              <.icon name="hero-information-circle" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+              <span>Maksimal 5MB. <strong>Sangat disarankan</strong> melampirkan screenshot pesan error atau foto kendala fisik untuk mempercepat tim kami mengidentifikasi masalah.</span>
             </p>
           </div>
         </div>

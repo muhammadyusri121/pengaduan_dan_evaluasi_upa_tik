@@ -132,6 +132,17 @@ defmodule Sipadu.Pengaduan do
   end
 
   @doc """
+  Menghitung jumlah laporan yang dikelompokkan berdasarkan status dalam 1 query.
+  """
+  def get_laporan_status_counts do
+    Laporan
+    |> group_by([l], l.status)
+    |> select([l], {l.status, count(l.id)})
+    |> Repo.all()
+    |> Enum.into(%{})
+  end
+
+  @doc """
   Fungsi khusus admin untuk memperbarui laporan (misal mengubah status & tanggapan).
   """
   def admin_update_laporan(%Laporan{} = laporan, attrs) do
