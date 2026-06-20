@@ -10,7 +10,7 @@
     Cari solusi masalah IT Anda di sini atau laporkan kendala baru untuk segera ditangani oleh tim ahli kami.
   </p>
 
-  <div class="relative w-full max-w-[95%] md:max-w-2xl group z-20">
+  <form action={~p"/cari"} method="get" class="relative w-full max-w-[95%] md:max-w-2xl group z-20">
     <div class="absolute inset-y-0 left-0 pl-4 md:pl-5 flex items-center pointer-events-none transition-colors duration-300">
       <.icon
         name="hero-magnifying-glass"
@@ -19,16 +19,18 @@
     </div>
     <input
       type="text"
+      name="q"
+      required
       placeholder="Ketik: Wi-Fi putus, email error..."
       class="block w-full pl-11 md:pl-14 pr-16 md:pr-24 py-3.5 md:py-5 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus:shadow-[0_8px_30px_rgb(37,99,235,0.15)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 outline-none text-slate-700 transition-all duration-300 text-sm md:text-base placeholder:text-slate-400"
     />
     <div class="absolute inset-y-0 right-1.5 md:right-2 flex items-center">
-      <button class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white p-2 md:px-4 md:py-2.5 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 group-focus-within:bg-blue-700">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white p-2 md:px-4 md:py-2.5 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 group-focus-within:bg-blue-700">
         <span class="hidden md:inline-block text-sm font-semibold">Cari</span>
         <.icon name="hero-arrow-right" class="h-4 w-4 md:h-5 md:w-5" />
       </button>
     </div>
-  </div>
+  </form>
 </main>
 
 <section class="py-12 md:py-16 px-4 relative z-10">

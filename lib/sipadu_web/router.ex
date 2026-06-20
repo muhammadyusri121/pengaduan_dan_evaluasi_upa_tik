@@ -26,6 +26,7 @@ defmodule SipaduWeb.Router do
     get "/", PageController, :home
     get "/login", AuthController, :login
     get "/topik/:kategori", PageController, :topik
+    get "/cari", PageController, :cari
   end
 
   scope "/", SipaduWeb do

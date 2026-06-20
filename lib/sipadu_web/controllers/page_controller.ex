@@ -5,33 +5,39 @@ defmodule SipaduWeb.PageController do
     [
       %{
         id: "d1",
-        kategori: "Jaringan & Wi-Fi",
+        kategori: "Jaringan & Internet",
         q: "Wi-Fi kampus sering putus, apa yang harus saya lakukan?",
         a: "Pastikan Anda berada di area dengan jangkauan sinyal yang baik atau coba lupakan jaringan (forget network) dan login kembali."
       },
       %{
         id: "d2",
-        kategori: "Jaringan & Wi-Fi",
-        q: "Bagaimana cara mendapatkan akses Wi-Fi kampus?",
-        a: "Gunakan NIM/NIP sebagai username dan password dari portal akademik Anda untuk login ke jaringan kampus."
+        kategori: "Perangkat Keras",
+        q: "Printer atau komputer lab tidak berfungsi, bagaimana melapor?",
+        a: "Silakan buat laporan dengan memilih kategori 'Perangkat Keras'. Pastikan Anda menyebutkan lokasi alat (Nama Gedung & No Ruangan) agar teknisi mudah mencarinya."
       },
       %{
         id: "d3",
-        kategori: "Sistem Akademik",
-        q: "Tidak bisa login ke portal akademik, apa solusinya?",
-        a: "Silakan gunakan fitur 'Lupa Password' di halaman login portal, atau ajukan tiket bantuan pada kategori Sistem Akademik."
+        kategori: "Perangkat Lunak",
+        q: "Bagaimana cara instalasi software berlisensi dari kampus?",
+        a: "Buat tiket laporan pada kategori ini dengan menyebutkan nama software yang dibutuhkan. Tim kami akan merespon dengan tautan instalasi atau panduan."
       },
       %{
         id: "d4",
-        kategori: "Email Kampus",
-        q: "Cara mengaktifkan email kampus untuk mahasiswa baru?",
-        a: "Mahasiswa baru dapat mengaktifkan email melalui portal akademik dengan memilih menu 'Aktivasi Layanan Google Workspace'."
+        kategori: "Akun & Email",
+        q: "Lupa password email kampus atau portal?",
+        a: "Jika fitur 'Lupa Password' gagal, ajukan laporan di kategori 'Akun & Email' dengan menyertakan foto KTM untuk proses verifikasi reset password."
       },
       %{
         id: "d5",
-        kategori: "Perangkat Keras",
-        q: "Printer di lab tidak berfungsi, bagaimana cara melapor?",
-        a: "Silakan buat laporan baru melalui sistem ini dengan memilih kategori 'Perangkat Keras' dan sebutkan lokasi lab dengan spesifik."
+        kategori: "Website & Sistem Informas",
+        q: "KRS Online tidak bisa diakses atau website error?",
+        a: "Bisa jadi server sedang dalam masa maintenance. Jika error terus berlanjut, mohon lampirkan screenshot pesan error dan URL halaman yang bermasalah."
+      },
+      %{
+        id: "d6",
+        kategori: "Lainnya",
+        q: "Kendala saya tidak termasuk dalam kategori di atas?",
+        a: "Silakan pilih kategori 'Lainnya' dan jelaskan selengkap mungkin kronologi masalah Anda. Tim teknis akan menganalisis dan mengarahkannya ke divisi yang tepat."
       }
     ]
   end
@@ -85,5 +91,26 @@ defmodule SipaduWeb.PageController do
       |> Enum.uniq_by(& &1.judul_laporan)
 
     render(conn, :topik, kategori_nama: kategori, faq: faq)
+  end
+
+  def cari(conn, %{"q" => query}) do
+    db_faq = Sipadu.Pengaduan.search_resolved_laporan(query)
+    mapped_db = Enum.map(db_faq, fn l -> 
+      %{judul_laporan: l.judul_laporan, tanggapan_admin: l.tanggapan_admin}
+    end)
+
+    search_term = String.downcase(query)
+    mapped_default = 
+      get_default_faq()
+      |> Enum.filter(fn d -> 
+        String.contains?(String.downcase(d.q), search_term) or String.contains?(String.downcase(d.a), search_term)
+      end)
+      |> Enum.map(fn d -> %{judul_laporan: d.q, tanggapan_admin: d.a} end)
+
+    faq = 
+      (mapped_db ++ mapped_default)
+      |> Enum.uniq_by(& &1.judul_laporan)
+
+    render(conn, :cari, query: query, faq: faq)
   end
 end
