@@ -178,11 +178,15 @@ defmodule Sipadu.Pengaduan do
   """
   def search_resolved_laporan(query) do
     search_term = "%#{query}%"
-    
+
     Laporan
     |> where(status: "Selesai")
     |> where([l], not is_nil(l.tanggapan_admin) and l.tanggapan_admin != "")
-    |> where([l], ilike(l.judul_laporan, ^search_term) or ilike(l.tanggapan_admin, ^search_term) or ilike(l.deskripsi, ^search_term))
+    |> where(
+      [l],
+      ilike(l.judul_laporan, ^search_term) or ilike(l.tanggapan_admin, ^search_term) or
+        ilike(l.deskripsi, ^search_term)
+    )
     |> order_by(desc: :updated_at)
     |> Repo.all()
   end

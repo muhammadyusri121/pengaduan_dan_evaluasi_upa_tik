@@ -1,7 +1,7 @@
 defmodule Sipadu.Accounts do
   @moduledoc """
   The Accounts context.
-  
+
   Mendefinisikan fungsi-fungsi untuk mengelola data user,
   termasuk mengambil, membuat, dan memperbarui profil pengguna 
   yang terhubung melalui Google OAuth.
@@ -36,12 +36,13 @@ defmodule Sipadu.Accounts do
           "name" => attrs[:name] || attrs["name"],
           "image" => attrs[:image] || attrs["image"]
         }
-        
+
         # We only update if the fields are actually present to avoid nulling them out
         update_attrs = Enum.reject(update_attrs, fn {_, v} -> is_nil(v) end) |> Enum.into(%{})
-        
+
         {:ok, updated_user} = update_user(user, update_attrs)
         updated_user
+
       nil ->
         %User{}
         |> User.changeset(attrs)

@@ -22,11 +22,12 @@ defmodule SipaduWeb.AuthController do
     email = auth.info.email
 
     if Enum.any?(allowed_domains, fn domain -> String.ends_with?(email, domain) end) do
-      user = Sipadu.Accounts.get_or_create_user_by_email(%{
-        email: email,
-        name: auth.info.name,
-        image: auth.info.image
-      })
+      user =
+        Sipadu.Accounts.get_or_create_user_by_email(%{
+          email: email,
+          name: auth.info.name,
+          image: auth.info.image
+        })
 
       conn
       |> put_session(:current_user, user.id)
@@ -34,7 +35,10 @@ defmodule SipaduWeb.AuthController do
       |> redirect(to: ~p"/")
     else
       conn
-      |> put_flash(:error, "Akses ditolak. Harap gunakan email kampus (@student.trunojoyo.ac.id atau @trunojoyo.ac.id).")
+      |> put_flash(
+        :error,
+        "Akses ditolak. Harap gunakan email kampus (@student.trunojoyo.ac.id atau @trunojoyo.ac.id)."
+      )
       |> redirect(to: ~p"/login")
     end
   end

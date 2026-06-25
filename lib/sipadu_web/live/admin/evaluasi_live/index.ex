@@ -195,7 +195,8 @@ defmodule SipaduWeb.Admin.EvaluasiLive.Index do
 
     ~H"""
     <div class="bg-white p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex items-start justify-between hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group cursor-default relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+      </div>
       <div class="space-y-3 relative z-10">
         <span class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest group-hover:text-blue-600 transition-colors">
           {@label}

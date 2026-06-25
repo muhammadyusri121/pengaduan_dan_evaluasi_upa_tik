@@ -258,11 +258,18 @@ defmodule SipaduWeb.Admin.KategoriLive.Index do
                     checked={@form[:aktif].value}
                     class="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded focus:ring-0 checked:bg-blue-600 checked:border-blue-600 transition-all cursor-pointer"
                   />
-                  <.icon name="hero-check" class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                  <.icon
+                    name="hero-check"
+                    class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
+                  />
                 </div>
                 <div class="flex flex-col">
-                  <span class="text-sm font-extrabold text-slate-800 group-hover:text-blue-700 transition-colors">Status Kategori Aktif</span>
-                  <span class="text-[10px] font-semibold text-slate-500">Centang agar kategori ini dapat dipilih pelapor.</span>
+                  <span class="text-sm font-extrabold text-slate-800 group-hover:text-blue-700 transition-colors">
+                    Status Kategori Aktif
+                  </span>
+                  <span class="text-[10px] font-semibold text-slate-500">
+                    Centang agar kategori ini dapat dipilih pelapor.
+                  </span>
                 </div>
               </label>
             </div>
@@ -310,7 +317,9 @@ defmodule SipaduWeb.Admin.KategoriLive.Index do
                   class="hover:bg-blue-50/50 transition-colors duration-200 group"
                 >
                   <td class="px-8 py-5">
-                    <span class="block text-sm font-extrabold text-slate-800 mb-0.5 group-hover:text-blue-700 transition-colors">{kat.nama}</span>
+                    <span class="block text-sm font-extrabold text-slate-800 mb-0.5 group-hover:text-blue-700 transition-colors">
+                      {kat.nama}
+                    </span>
                     <span class="block text-xs font-medium text-slate-500 truncate max-w-xs md:max-w-md">
                       {kat.deskripsi || "Tidak ada deskripsi."}
                     </span>

@@ -10,7 +10,6 @@ if File.exists?(".env") do
   end
 end
 
-
 # Configure your database
 config :sipadu, Sipadu.Repo,
   username: System.get_env("POSTGRES_USER"),

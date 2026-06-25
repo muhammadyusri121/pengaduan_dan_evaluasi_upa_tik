@@ -18,6 +18,7 @@ defmodule SipaduWeb.UserAuth do
       id when is_integer(id) ->
         user = Sipadu.Accounts.get_user(id)
         assign(conn, :current_user, user)
+
       _ ->
         # Clear legacy sessions that store a map
         assign(conn, :current_user, nil)
@@ -62,6 +63,7 @@ defmodule SipaduWeb.UserAuth do
       id when is_integer(id) ->
         user = Sipadu.Accounts.get_user(id)
         {:cont, Phoenix.Component.assign(socket, :current_user, user)}
+
       _ ->
         {:halt, Phoenix.LiveView.redirect(socket, to: "/login")}
     end
@@ -89,6 +91,7 @@ defmodule SipaduWeb.UserAuth do
         id when is_integer(id) -> Sipadu.Accounts.get_user(id)
         _ -> nil
       end
+
     {:cont, Phoenix.Component.assign(socket, :current_user, user)}
   end
 end

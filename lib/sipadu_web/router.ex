@@ -45,7 +45,6 @@ defmodule SipaduWeb.Router do
   live_session :admin,
     on_mount: [{SipaduWeb.UserAuth, :ensure_admin}],
     layout: {SipaduWeb.Layouts, :admin} do
-
     scope "/admin", SipaduWeb.Admin do
       pipe_through [:browser]
 

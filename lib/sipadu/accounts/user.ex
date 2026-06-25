@@ -1,7 +1,7 @@
 defmodule Sipadu.Accounts.User do
   @moduledoc """
   Schema Ecto untuk memetakan data pengguna (User) ke tabel `users` di database.
-  
+
   Tabel ini menyimpan informasi dasar dari Google OAuth (`email`, `name`, `image`) 
   dan atribut profil tambahan (`jabatan`, `nim_nip`, `no_hp`, `fakultas_unit_kerja`).
   """
@@ -13,9 +13,9 @@ defmodule Sipadu.Accounts.User do
     field :email, :string
     field :name, :string
     field :image, :string
-    
+
     field :role, :string, default: "user"
-    
+
     # Profile fields
     field :jabatan, :string
     field :nim_nip, :string
@@ -28,7 +28,7 @@ defmodule Sipadu.Accounts.User do
   @doc """
   Fungsi changeset untuk memvalidasi dan mentransformasi data mentah (attrs)
   sebelum dimasukkan atau diperbarui ke dalam database.
-  
+
   Memastikan `email` bersifat wajib (required) dan unik.
   """
   def changeset(user, attrs) do

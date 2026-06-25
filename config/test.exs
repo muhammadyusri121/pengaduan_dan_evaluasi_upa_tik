@@ -2,6 +2,7 @@ import Config
 
 # Load .env if it exists to retrieve local database credentials
 env_path = Path.expand("../.env", __DIR__)
+
 if File.exists?(env_path) do
   for line <- File.stream!(env_path, [], :line),
       line = String.trim(line),

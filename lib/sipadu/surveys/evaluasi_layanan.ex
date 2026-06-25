@@ -14,7 +14,7 @@ defmodule Sipadu.Surveys.EvaluasiLayanan do
     field :kecepatan_respon, :integer
     field :kecepatan_penanganan, :integer
     field :kualitas_layanan, :integer
-    
+
     # Optional relation to user
     belongs_to :user, Sipadu.Accounts.User
 
@@ -25,28 +25,28 @@ defmodule Sipadu.Surveys.EvaluasiLayanan do
   def changeset(evaluasi_layanan, attrs) do
     evaluasi_layanan
     |> cast(attrs, [
-      :nama, 
-      :jabatan, 
-      :nim_nip, 
-      :no_hp, 
-      :fakultas_unit_kerja, 
-      :layanan_yang_diminta, 
-      :masukan, 
-      :kemudahan_pengajuan, 
-      :kecepatan_respon, 
-      :kecepatan_penanganan, 
+      :nama,
+      :jabatan,
+      :nim_nip,
+      :no_hp,
+      :fakultas_unit_kerja,
+      :layanan_yang_diminta,
+      :masukan,
+      :kemudahan_pengajuan,
+      :kecepatan_respon,
+      :kecepatan_penanganan,
       :kualitas_layanan,
       :user_id
     ])
     |> validate_required([
-      :nama, 
-      :jabatan, 
-      :nim_nip, 
-      :fakultas_unit_kerja, 
-      :layanan_yang_diminta, 
-      :kemudahan_pengajuan, 
-      :kecepatan_respon, 
-      :kecepatan_penanganan, 
+      :nama,
+      :jabatan,
+      :nim_nip,
+      :fakultas_unit_kerja,
+      :layanan_yang_diminta,
+      :kemudahan_pengajuan,
+      :kecepatan_respon,
+      :kecepatan_penanganan,
       :kualitas_layanan
     ])
     |> validate_inclusion(:kemudahan_pengajuan, 1..5)

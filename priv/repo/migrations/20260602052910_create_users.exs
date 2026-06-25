@@ -6,7 +6,7 @@ defmodule Sipadu.Repo.Migrations.CreateUsers do
       add :email, :string, null: false
       add :name, :string
       add :image, :string
-      
+
       # Additional Profile Fields
       add :jabatan, :string
       add :nim_nip, :string

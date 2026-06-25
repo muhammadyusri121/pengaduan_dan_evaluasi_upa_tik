@@ -52,16 +52,18 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
             Kelola, pantau, dan tanggapi semua laporan yang masuk ke sistem.
           </p>
         </div>
-        
+
         <div class="relative z-10 hidden xl:block">
-           <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex items-center gap-3">
-             <.icon name="hero-information-circle" class="w-6 h-6 text-blue-200" />
-             <p class="text-sm text-blue-50">Klik pada baris mana saja untuk melihat detail laporan.</p>
-           </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex items-center gap-3">
+            <.icon name="hero-information-circle" class="w-6 h-6 text-blue-200" />
+            <p class="text-sm text-blue-50">
+              Klik pada baris mana saja untuk melihat detail laporan.
+            </p>
+          </div>
         </div>
       </div>
       
-      <!-- Filter Tabs / Segmented Control -->
+    <!-- Filter Tabs / Segmented Control -->
       <div class="mb-8">
         <div class="inline-flex bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60 overflow-x-auto max-w-full hide-scrollbar">
           <%= for status <- ["Semua", "Menunggu", "Diproses", "Di Respon", "Selesai", "Ditolak"] do %>
@@ -162,7 +164,10 @@ defmodule SipaduWeb.Admin.LaporanLive.Index do
                 </td>
                 <td class="px-8 py-6 whitespace-nowrap text-right">
                   <div class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100/50 rounded-xl transition-all inline-flex items-center justify-center">
-                    <.icon name="hero-arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <.icon
+                      name="hero-arrow-right"
+                      class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    />
                   </div>
                 </td>
               </tr>

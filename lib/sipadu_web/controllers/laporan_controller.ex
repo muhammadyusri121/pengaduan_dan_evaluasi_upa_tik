@@ -34,7 +34,12 @@ defmodule SipaduWeb.LaporanController do
 
     changeset = Pengaduan.change_laporan(%Laporan{}, default_attrs)
     kategori_list = Pengaduan.list_kategori_aktif()
-    render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
+
+    render(conn, :new,
+      page_title: "Buat Laporan Pengaduan",
+      form: Phoenix.Component.to_form(changeset),
+      kategori_list: kategori_list
+    )
   end
 
   @doc """
@@ -50,12 +55,12 @@ defmodule SipaduWeb.LaporanController do
           # Sanitasi nama file dengan mengganti karakter non-alphanumeric menjadi underscore
           raw_filename = upload.filename
           ext = Path.extname(raw_filename)
-          
-          sanitized_base = 
+
+          sanitized_base =
             raw_filename
             |> Path.rootname()
             |> String.replace(~r/[^a-zA-Z0-9_\-]/, "_")
-            
+
           unique_filename = "#{System.system_time(:millisecond)}_#{sanitized_base}#{ext}"
           file_binary = File.read!(upload.path)
 
@@ -76,24 +81,40 @@ defmodule SipaduWeb.LaporanController do
         case Pengaduan.create_laporan(final_params) do
           {:ok, _laporan} ->
             conn
-            |> put_flash(:info, "Laporan pengaduan berhasil dikirim! Silakan pantau status penanganan di halaman ini.")
+            |> put_flash(
+              :info,
+              "Laporan pengaduan berhasil dikirim! Silakan pantau status penanganan di halaman ini."
+            )
             |> redirect(to: ~p"/laporan")
 
           {:error, %Ecto.Changeset{} = changeset} ->
             kategori_list = Pengaduan.list_kategori_aktif()
-            render(conn, :new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
+
+            render(conn, :new,
+              page_title: "Buat Laporan Pengaduan",
+              form: Phoenix.Component.to_form(changeset),
+              kategori_list: kategori_list
+            )
         end
 
       {:error, reason} ->
         changeset =
           %Laporan{}
           |> Pengaduan.change_laporan(laporan_params)
-          |> Ecto.Changeset.add_error(:lampiran, "gagal diunggah ke penyimpanan (MinIO): #{inspect(reason)}")
+          |> Ecto.Changeset.add_error(
+            :lampiran,
+            "gagal diunggah ke penyimpanan (MinIO): #{inspect(reason)}"
+          )
 
         kategori_list = Pengaduan.list_kategori_aktif()
+
         conn
         |> put_flash(:error, "Gagal mengunggah file.")
-        |> render(:new, page_title: "Buat Laporan Pengaduan", form: Phoenix.Component.to_form(changeset), kategori_list: kategori_list)
+        |> render(:new,
+          page_title: "Buat Laporan Pengaduan",
+          form: Phoenix.Component.to_form(changeset),
+          kategori_list: kategori_list
+        )
     end
   end
 

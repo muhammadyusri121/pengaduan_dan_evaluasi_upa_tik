@@ -106,9 +106,14 @@ defmodule SipaduWeb.Admin.DashboardLive do
               </div>
             <% else %>
               <%= for lap <- @recent_laporan do %>
-                <.link navigate={~p"/admin/laporan/#{lap.id}"} class="p-6 px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 hover:bg-blue-50/50 transition-colors duration-200 group block">
+                <.link
+                  navigate={~p"/admin/laporan/#{lap.id}"}
+                  class="p-6 px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 hover:bg-blue-50/50 transition-colors duration-200 group block"
+                >
                   <div class="space-y-1.5 flex-1">
-                    <p class="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-blue-700 transition-colors">{lap.judul_laporan}</p>
+                    <p class="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-blue-700 transition-colors">
+                      {lap.judul_laporan}
+                    </p>
                     <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500 font-medium">
                       <div class="flex items-center gap-1.5">
                         <.icon name="hero-user" class="w-4 h-4 text-slate-400" />
@@ -123,7 +128,10 @@ defmodule SipaduWeb.Admin.DashboardLive do
                   <div class="flex items-center gap-4">
                     <.status_badge status={lap.status} />
                     <div class="p-2 text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-100/50 rounded-xl transition-all">
-                      <.icon name="hero-arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      <.icon
+                        name="hero-arrow-right"
+                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                      />
                     </div>
                   </div>
                 </.link>
@@ -188,7 +196,8 @@ defmodule SipaduWeb.Admin.DashboardLive do
   defp stat_card(assigns) do
     ~H"""
     <div class="bg-white p-5 xl:p-6 rounded-3xl shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5 group cursor-pointer relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 -z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+      </div>
       <div class={[
         "p-3.5 rounded-2xl flex items-center justify-center shadow-inner w-fit group-hover:scale-110 transition-transform duration-300",
         @theme == "indigo" && "bg-indigo-50 text-indigo-600 border border-indigo-100",
@@ -201,7 +210,9 @@ defmodule SipaduWeb.Admin.DashboardLive do
       </div>
       <div class="space-y-0.5">
         <span class="block text-3xl font-black text-slate-800">{@value}</span>
-        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-blue-600 transition-colors">{@title}</span>
+        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
+          {@title}
+        </span>
       </div>
     </div>
     """

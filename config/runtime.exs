@@ -9,6 +9,7 @@ import Config
 
 if config_env() in [:dev, :test] do
   env_path = Path.expand(".env", __DIR__ |> Path.join(".."))
+
   if File.exists?(env_path) do
     env_path
     |> File.stream!()
@@ -21,7 +22,6 @@ if config_env() in [:dev, :test] do
     end)
   end
 end
-
 
 # ## Using releases
 #

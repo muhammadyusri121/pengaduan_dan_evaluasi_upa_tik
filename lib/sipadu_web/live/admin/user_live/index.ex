@@ -29,7 +29,10 @@ defmodule SipaduWeb.Admin.UserLive.Index do
         {:ok, updated_user} ->
           socket =
             socket
-            |> put_flash(:info, "Role pengguna #{updated_user.name} berhasil diubah menjadi #{updated_user.role}.")
+            |> put_flash(
+              :info,
+              "Role pengguna #{updated_user.name} berhasil diubah menjadi #{updated_user.role}."
+            )
             |> stream_insert(:user_list, updated_user)
 
           {:noreply, socket}
@@ -55,8 +58,8 @@ defmodule SipaduWeb.Admin.UserLive.Index do
           </p>
         </div>
       </div>
-
-      <!-- User List Card -->
+      
+    <!-- User List Card -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
@@ -71,12 +74,22 @@ defmodule SipaduWeb.Admin.UserLive.Index do
               </tr>
             </thead>
             <tbody id="user-table" phx-update="stream" class="divide-y divide-slate-150">
-              <tr :for={{id, user} <- @streams.user_list} id={id} class="hover:bg-blue-50/50 transition-colors duration-200 group">
+              <tr
+                :for={{id, user} <- @streams.user_list}
+                id={id}
+                class="hover:bg-blue-50/50 transition-colors duration-200 group"
+              >
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <img src={user.image} class="w-10 h-10 rounded-full border border-slate-200 group-hover:border-blue-300 group-hover:shadow-md transition-all duration-300" alt="Avatar" />
+                  <img
+                    src={user.image}
+                    class="w-10 h-10 rounded-full border border-slate-200 group-hover:border-blue-300 group-hover:shadow-md transition-all duration-300"
+                    alt="Avatar"
+                  />
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">{user.name}</div>
+                  <div class="text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
+                    {user.name}
+                  </div>
                   <div class="text-xs text-slate-500">{user.email}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
@@ -101,11 +114,16 @@ defmodule SipaduWeb.Admin.UserLive.Index do
                       phx-value-id={user.id}
                       class={[
                         "inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 border shadow-sm active:scale-95",
-                        user.role == "admin" && "text-rose-600 bg-rose-50 border-rose-100 hover:bg-rose-100",
-                        user.role != "admin" && "text-indigo-600 bg-indigo-50 border-indigo-100 hover:bg-indigo-100"
+                        user.role == "admin" &&
+                          "text-rose-600 bg-rose-50 border-rose-100 hover:bg-rose-100",
+                        user.role != "admin" &&
+                          "text-indigo-600 bg-indigo-50 border-indigo-100 hover:bg-indigo-100"
                       ]}
                     >
-                      <.icon name={if user.role == "admin", do: "hero-user-minus", else: "hero-user-plus"} class="w-4 h-4" />
+                      <.icon
+                        name={if user.role == "admin", do: "hero-user-minus", else: "hero-user-plus"}
+                        class="w-4 h-4"
+                      />
                       {if user.role == "admin", do: "Demote to User", else: "Promote to Admin"}
                     </button>
                   <% else %>
